@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Xnet from '../views/Xnet.vue'
 import Auth from '../views/Auth.vue'
 import SignUp from '../views/SignUp.vue'
 import UserPage from '../views/UserPage.vue'
@@ -21,11 +20,6 @@ const routes = [
     path: '/UserPage',
     name: 'UserPage',
     component: UserPage
-  },
-  {
-    path: '/Xnet',
-    name: 'Xnet',
-    component: Xnet
   },
   {
     path: '/Auth',
