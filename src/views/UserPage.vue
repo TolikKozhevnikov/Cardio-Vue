@@ -6,13 +6,24 @@
       <v-tab :key="2">Диагностика по заболеваниям</v-tab>
       <v-tab-item :key="1">
         <v-conteiner class="spacing-playground" fluid>
-          <v-row class="pt-3" hight="100%">
+          <v-row class="pt-3">
             <v-col>
               <th class="text-left text-uppercase font-weight-regular px-3">
                 Симптомы
               </th>
+              <v-autocomplete
+                class="px-4 mt-4"
+                v-model="value"
+                :items="AllSymptom"
+                dense
+                item-text="name"
+                label="Поиск по симптомам"
+                item-value="id"
+                @change="ClickSymptom(value)"
+                color="green"
+              ></v-autocomplete>
               <v-select
-                class="pa-4"
+                class="px-4"
                 v-model="selected"
                 @change="onChangeSelectedTask()"
                 color="green"
@@ -22,7 +33,7 @@
                 item-text="name"
                 item-value="id"
               ></v-select>
-              <v-sheet elevation="4" class="overflow-y-auto" max-height="330">
+              <v-sheet elevation="4" class="overflow-y-auto" max-height="290">
                 <v-simple-table dense>
                   <tbody>
                     <tr
@@ -269,6 +280,7 @@ export default {
       IllnessStringTable: null,
       AllType: null,
       idTypeSelected: null,
+      value: null,
     };
   },
   methods: {
@@ -463,6 +475,13 @@ export default {
     this.axios
       .get("http://192.168.1.110:8001/api/ReturnAllType")
       .then((response) => (this.AllType = response.data));
+  },
+  computed: {
+    todosByTitle() {
+      return this.AllSymptom.filter(
+        (item) => item.name.indexOf(this.search) !== -1
+      );
+    },
   },
 };
 </script>
