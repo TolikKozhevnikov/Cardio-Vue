@@ -4,6 +4,7 @@
     <v-tabs color="green darken-1">
       <v-tab :key="1">Заболевания / Все симптомы</v-tab>
       <v-tab :key="2">Добавить симптом / заболевание</v-tab>
+      <v-tab :key="3">Настройка базы данных</v-tab>
       <v-tab-item :key="1">
         <v-row class="pt-3">
           <v-col>
@@ -208,6 +209,7 @@
           </v-col>
         </v-row>
       </v-tab-item>
+      <v-tab-item :key="3"> </v-tab-item>
     </v-tabs>
   </v-app>
 </template>
