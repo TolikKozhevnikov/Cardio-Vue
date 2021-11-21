@@ -2,208 +2,9 @@
 <template>
   <v-app>
     <v-tabs color="green darken-1">
-      <v-tab :key="1">Диагностика по симптомам</v-tab>
-      <v-tab :key="2">Диагностика по заболеваниям</v-tab>
-      <v-tab :key="3">Заболевания / Все симптомы</v-tab>
-      <v-tab :key="4">Добавить симптом / заболевание</v-tab>
-
+      <v-tab :key="1">Заболевания / Все симптомы</v-tab>
+      <v-tab :key="2">Добавить симптом / заболевание</v-tab>
       <v-tab-item :key="1">
-        <v-conteiner class="spacing-playground" fluid>
-          <v-row class="pt-3">
-            <v-col>
-              <th class="text-left text-uppercase font-weight-regular px-3">
-                Симптомы
-              </th>
-              <v-sheet elevation="4" class="overflow-y-auto" max-height="400">
-                <v-simple-table dense>
-                  <tbody>
-                    <tr
-                      @click="ClickSymptom(item.id)"
-                      v-for="item in AllSymptom"
-                      :key="item.name"
-                    >
-                      <td class="py-2">{{ item.name }}</td>
-                    </tr>
-                  </tbody>
-                </v-simple-table>
-              </v-sheet>
-            </v-col>
-
-            <v-col>
-              <div v-if="AllIllness != 'Not'">
-                <th class="text-left text-uppercase font-weight-regular px-3">
-                  Заболевания
-                </th>
-                <v-sheet elevation="4" class="overflow-y-auto" max-height="400">
-                  <v-simple-table dense>
-                    <tbody>
-                      <tr v-for="item in AllIllness" :key="item.name">
-                        <td class="py-2">{{ item.name }}</td>
-                      </tr>
-                    </tbody>
-                  </v-simple-table>
-                </v-sheet>
-              </div>
-              <div v-else>
-                <h2 class="font-weight-light">
-                  Не найдено подходящего заболевания
-                </h2>
-              </div>
-            </v-col>
-          </v-row>
-          <v-row v-if="visibleSelectedSimptom">
-            <v-col>
-              <v-row class="pa-3" align="center">
-                <th class="text-left text-uppercase font-weight-regular px-3">
-                  Выбранные симптомы:
-                </th>
-                <v-spacer></v-spacer>
-                <v-btn text color="success" @click="DeleteAllSelectedSymptom()"
-                  >Удалить выбранные симптомы</v-btn
-                >
-              </v-row>
-
-              <v-sheet elevation="4" class="overflow-y-auto" max-height="190">
-                <v-simple-table dense>
-                  <tbody>
-                    <tr
-                      @click="DeleteSymptom(item.id)"
-                      v-for="item in SymptomId"
-                      :key="item.name"
-                    >
-                      <td class="py-2">{{ item.name }}</td>
-                    </tr>
-                  </tbody>
-                </v-simple-table>
-              </v-sheet>
-            </v-col>
-
-            <v-col>
-              <div v-if="CheckSymptom != 'not'">
-                <v-row class="pa-3" align="center">
-                  <th class="text-left text-uppercase font-weight-regular px-3">
-                    Следует проверить следующий симптом:
-                  </th>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    @click="ClickSymptom(CheckSymptom.id)"
-                    text
-                    color="green"
-                    >Добавить</v-btn
-                  >
-                </v-row>
-
-                <v-sheet class="overflow-y-auto" max-height="300">
-                  <v-card>
-                    <v-card-text>{{ CheckSymptom.name }}</v-card-text>
-                  </v-card>
-                </v-sheet>
-              </div>
-            </v-col>
-          </v-row>
-        </v-conteiner>
-      </v-tab-item>
-      <v-tab-item :key="2">
-        <v-conteiner>
-          <v-row class="pt-3">
-            <v-col>
-              <th class="text-left text-uppercase font-weight-regular px-3">
-                Заболевания
-              </th>
-              <v-sheet elevation="4" class="overflow-y-auto" max-height="650">
-                <v-simple-table dense>
-                  <tbody>
-                    <tr
-                      @click="ClickIllness(item.id, item.name)"
-                      v-for="item in AllIllness"
-                      :key="item.name"
-                    >
-                      <td class="py-2">{{ item.name }}</td>
-                    </tr>
-                  </tbody>
-                </v-simple-table>
-              </v-sheet>
-            </v-col>
-            <v-col>
-              <div v-if="flagSimptom">
-                <v-row class="pt-3 mr-4">
-                  <th class="text-left text-uppercase font-weight-regular px-3">
-                    Выбранное заболевание:
-                  </th>
-                </v-row>
-                <v-row class="pt-3 mr-4">
-                  <v-card class="d-flex pa-2">
-                    <v-card-text class="black--text">
-                      {{ illnessSelected }}
-                    </v-card-text>
-                  </v-card>
-                </v-row>
-                <v-row class="pt-3 mr-4">
-                  <th class="text-left text-uppercase font-weight-regular px-3">
-                    Симптомы которые должны быть:
-                  </th>
-                </v-row>
-                <v-row class="pt-3 mr-4">
-                  <v-sheet
-                    elevation="4"
-                    class="overflow-y-auto"
-                    max-height="260"
-                  >
-                    <v-simple-table dense>
-                      <tbody>
-                        <tr
-                          @click="ClickSymptom(item.id)"
-                          v-for="item in AllIllness1"
-                          :key="item.name"
-                        >
-                          <td class="py-2">{{ item.name }}</td>
-                        </tr>
-                      </tbody>
-                    </v-simple-table>
-                  </v-sheet>
-                </v-row>
-                <v-row class="pt-3 mr-4">
-                  <th class="text-left text-uppercase font-weight-regular px-3">
-                    Симптомы которые могут быть:
-                  </th>
-                  <v-sheet
-                    elevation="4"
-                    class="overflow-y-auto"
-                    max-height="260"
-                  >
-                    <v-simple-table dense>
-                      <tbody>
-                        <tr
-                          @click="ClickSymptom(item.id)"
-                          v-for="item in AllIllness2"
-                          :key="item.name"
-                        >
-                          <td class="py-2">{{ item.name }}</td>
-                        </tr>
-                      </tbody>
-                    </v-simple-table>
-                  </v-sheet>
-                </v-row>
-                <v-row class="py-3 mr-4">
-                  <v-btn
-                    block
-                    text
-                    color="success"
-                    @click="DeleteAllSelectedIllness()"
-                    >Начать заново</v-btn
-                  >
-                </v-row>
-              </div>
-              <div v-else>
-                <h2 class="font-weight-light">
-                  Выберите заболевание из таблицы.
-                </h2>
-              </div>
-            </v-col>
-          </v-row>
-        </v-conteiner>
-      </v-tab-item>
-      <v-tab-item :key="3">
         <v-row class="pt-3">
           <v-col>
             <th class="text-left text-uppercase font-weight-regular px-3">
@@ -303,7 +104,7 @@
           </v-card>
         </v-dialog>
       </v-tab-item>
-      <v-tab-item :key="4">
+      <v-tab-item :key="2">
         <v-row>
           <v-col>
             <div class="pa-5">
@@ -405,7 +206,6 @@
               </v-col>
             </div>
           </v-col>
-          
         </v-row>
       </v-tab-item>
     </v-tabs>
