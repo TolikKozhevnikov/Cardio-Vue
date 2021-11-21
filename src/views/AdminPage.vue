@@ -108,8 +108,8 @@
       <v-tab-item :key="2">
         <v-row>
           <v-col>
-            <div class="pa-5">
-              <th class="text-left text-uppercase font-weight-regular py-3">
+            <div class="pa-3">
+              <th class="text-left text-uppercase font-weight-regular pb-3">
                 Добавить симптом
               </th>
 
@@ -156,8 +156,8 @@
             </div>
           </v-col>
           <v-col>
-            <div class="pa-5">
-              <th class="text-left text-uppercase font-weight-regular py-3">
+            <div class="pa-3">
+              <th class="text-left text-uppercase font-weight-regular pb-3">
                 Добавить заболевание
               </th>
               <v-text-field
@@ -209,7 +209,16 @@
           </v-col>
         </v-row>
       </v-tab-item>
-      <v-tab-item :key="3"> </v-tab-item>
+      <v-tab-item :key="3"> 
+        <v-row class="pt-3">
+          <v-col>
+            <th class="text-left text-uppercase font-weight-regular px-3">
+              Версия базы данных: {{BdVersion}}
+            </th>
+          </v-col>
+        </v-row>
+        
+      </v-tab-item>
     </v-tabs>
   </v-app>
 </template>
@@ -262,6 +271,7 @@ export default {
       CheckSymptom: null,
       IllnessStringTable: null,
       AllType: null,
+      BdVersion: null,
     };
   },
   methods: {
@@ -453,6 +463,9 @@ export default {
     this.axios
       .get("http://192.168.1.110:8001/api/ReturnAllType")
       .then((response) => (this.AllType = response.data));
+    this.axios
+      .get("http://192.168.1.110:8001/api/ReturnBdVersion")
+      .then((response) => (this.BdVersion = response.data));
   },
 };
 </script>
