@@ -4,7 +4,7 @@ import Auth from '../views/Auth.vue'
 import SignUp from '../views/SignUp.vue'
 import UserPage from '../views/UserPage.vue'
 import HomePage from '../views/HomePage.vue'
-import Profile from '../views/Profile.vue'
+
 import AdminPage from '../views/AdminPage.vue'
 import PageNotFound from '../views/PageNotFound.vue'
 
@@ -30,11 +30,6 @@ const routes = [
     path: '/SignUp',
     name: 'SignUp',
     component: SignUp
-  },
-  {
-    path: '/Profile',
-    name: 'Profile',
-    component: Profile
   },
   {
     path: '/AdminPage',
