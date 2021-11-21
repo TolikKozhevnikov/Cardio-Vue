@@ -30,6 +30,7 @@
             <th class="text-left text-uppercase font-weight-regular px-3">
               Все симптомы
             </th>
+
             <v-sheet elevation="4" class="overflow-y-auto" max-height="650">
               <v-simple-table dense>
                 <tbody>
@@ -209,15 +210,14 @@
           </v-col>
         </v-row>
       </v-tab-item>
-      <v-tab-item :key="3"> 
+      <v-tab-item :key="3">
         <v-row class="pt-3">
           <v-col>
             <th class="text-left text-uppercase font-weight-regular px-3">
-              Версия базы данных: {{BdVersion}}
+              Версия базы данных: {{ BdVersion }}
             </th>
           </v-col>
         </v-row>
-        
       </v-tab-item>
     </v-tabs>
   </v-app>
