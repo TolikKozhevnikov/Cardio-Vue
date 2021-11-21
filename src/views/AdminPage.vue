@@ -73,7 +73,16 @@
             <v-card-text class="black--text font-weight-medium">
               {{ Symptom }}
             </v-card-text>
-
+            <v-card-text>
+              <v-select
+                v-model="TypeSelected"
+                color="green"
+                label="Тип обследования"
+                required
+                :items="AllType"
+                item-text="name"
+              ></v-select>
+            </v-card-text>
             <v-card-actions>
               <v-btn
                 color="green darken-1"
