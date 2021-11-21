@@ -30,7 +30,6 @@
             <th class="text-left text-uppercase font-weight-regular px-3">
               Все симптомы
             </th>
-
             <v-sheet elevation="4" class="overflow-y-auto" max-height="650">
               <v-simple-table dense>
                 <tbody>
