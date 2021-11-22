@@ -222,7 +222,8 @@
                       <v-menu offset-y>
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn
-                            color="green"
+                            color="green darken-3"
+                            text
                             dark
                             v-bind="attrs"
                             v-on="on"
@@ -320,16 +321,25 @@ export default {
     };
   },
   methods: {
+    ReturnSymptomAndType(){
+      this.axios
+      .get("http://192.168.1.110:8001/api/ReturnSymptomAndType")
+      .then((response) => (this.SymptomAndType = response.data));
+
+    },
     SymptomIdForChangeType(id) {
       this.SymptomIdForChangeTypeInt = id;
     },
     onChangeSelectedType(id) {
-      this.axios.get(
+      this.axios
+      .get(
         "http://192.168.1.110:8001/api/ChangeType/" +
           this.SymptomIdForChangeTypeInt +
           "/" +
-          id
-      );
+          id)
+      .then((response) => ((console.log(response.data)), this.ReturnSymptomAndType()))
+      
+      
     },
     ChangeToYes() {
       this.axios.get(
