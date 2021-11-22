@@ -53,18 +53,9 @@
         <v-dialog v-model="dialog" max-width="600">
           <v-card>
             <v-card-title class="font-weight-regular">
-              Редактирование симптома
-            </v-card-title>
-            <v-card-text class="black--text">
-              Может ли просутствовать выбранный симптом при выбранном
-              заболевании?
-            </v-card-text>
-            <v-card-text class="black--text text-left font-weight-regular">
-              Заболевание:
-            </v-card-text>
-            <v-card-text class="black--text font-weight-medium">
               {{ Illness }}
-            </v-card-text>
+            </v-card-title>
+          
             <v-card-text class="black--text text-left font-weight-regular">
               Симптом:
             </v-card-text>
