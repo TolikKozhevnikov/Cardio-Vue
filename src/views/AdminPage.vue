@@ -52,14 +52,16 @@
         </v-row>
         <v-dialog v-model="dialog" max-width="600">
           <v-card>
-            <v-card-title class="font-weight-regular">
-              {{ Illness }}
-            </v-card-title>
-          
+            <v-card-text class="black--text font-weight-medium pt-5">
+              Заболевание:
+            </v-card-text>
             <v-card-text class="black--text text-left font-weight-regular">
-              Симптом:
+              {{ Illness }}
             </v-card-text>
             <v-card-text class="black--text font-weight-medium">
+              Симптом:
+            </v-card-text>
+            <v-card-text class="black--text text-left font-weight-regular">
               {{ Symptom }}
             </v-card-text>
             <v-card-actions>
@@ -247,9 +249,24 @@
       <v-tab-item :key="4">
         <v-row class="pt-3">
           <v-col>
-            <th class="text-left text-uppercase font-weight-regular px-3">
-              Версия базы данных: {{ BdVersion }}
-            </th>
+            <v-container>
+              <p class="text-left text-uppercase font-weight-regular">
+                Версия базы данных: {{ BdVersion }}
+              </p>
+              <p>Загрузите базу данных или выберите из существующих:</p>
+              <v-file-input
+                v-model="file"
+                color="green darken-2"
+                v-on:change="handleFileUpload()"
+                ref="file"
+                label="Нажмите, чтобы загрузить свою базу данных"
+              ></v-file-input>
+              <v-select
+                color="green darken-2"
+                :items="items"
+                label="Нажмите, чтобы выбрать существующую БД"
+              ></v-select>
+            </v-container>
           </v-col>
         </v-row>
       </v-tab-item>
@@ -312,25 +329,27 @@ export default {
     };
   },
   methods: {
-    ReturnSymptomAndType(){
+    ReturnSymptomAndType() {
       this.axios
-      .get("http://192.168.1.110:8001/api/ReturnSymptomAndType")
-      .then((response) => (this.SymptomAndType = response.data));
-
+        .get("http://192.168.1.110:8001/api/ReturnSymptomAndType")
+        .then((response) => (this.SymptomAndType = response.data));
     },
     SymptomIdForChangeType(id) {
       this.SymptomIdForChangeTypeInt = id;
     },
     onChangeSelectedType(id) {
       this.axios
-      .get(
-        "http://192.168.1.110:8001/api/ChangeType/" +
-          this.SymptomIdForChangeTypeInt +
-          "/" +
-          id)
-      .then((response) => ((console.log(response.data)), this.ReturnSymptomAndType()))
-      
-      
+        .get(
+          "http://192.168.1.110:8001/api/ChangeType/" +
+            this.SymptomIdForChangeTypeInt +
+            "/" +
+            id
+        )
+        .then(
+          (response) => (
+            console.log(response.data), this.ReturnSymptomAndType()
+          )
+        );
     },
     ChangeToYes() {
       this.axios.get(
@@ -526,6 +545,7 @@ export default {
     this.axios
       .get("http://192.168.1.110:8001/api/ReturnSymptomAndType")
       .then((response) => (this.SymptomAndType = response.data));
+    this.ClickSymptomForTable(1,0)
   },
 };
 </script>
