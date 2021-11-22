@@ -4,7 +4,8 @@
     <v-tabs color="green darken-1">
       <v-tab :key="1">Заболевания / Все симптомы</v-tab>
       <v-tab :key="2">Добавить симптом / заболевание</v-tab>
-      <v-tab :key="3">Настройка базы данных</v-tab>
+      <v-tab :key="3">Изменение типа обследования </v-tab>
+      <v-tab :key="4">Настройка базы данных</v-tab>
       <v-tab-item :key="1">
         <v-row class="pt-3">
           <v-col>
@@ -43,9 +44,6 @@
                     <td class="py-2 font-weight-medium">
                       {{ item.tableLink }}
                     </td>
-                    <td class="py-2 font-weight-medium">
-                      {{ item.idType }}
-                    </td>
                   </tr>
                 </tbody>
               </v-simple-table>
@@ -72,16 +70,6 @@
             </v-card-text>
             <v-card-text class="black--text font-weight-medium">
               {{ Symptom }}
-            </v-card-text>
-            <v-card-text>
-              <v-select
-                v-model="TypeSelected"
-                color="green"
-                label="Тип обследования"
-                required
-                :items="AllType"
-                item-text="name"
-              ></v-select>
             </v-card-text>
             <v-card-actions>
               <v-btn
@@ -137,14 +125,6 @@
                 color="green"
               ></v-text-field>
 
-              <v-select
-                v-model="TypeSelected"
-                color="green"
-                label="Тип обследования"
-                required
-                :items="AllType"
-                item-text="name"
-              ></v-select>
               <v-select
                 v-model="ReliabilitySelected"
                 color="green"
@@ -222,6 +202,60 @@
         <v-row class="pt-3">
           <v-col>
             <th class="text-left text-uppercase font-weight-regular px-3">
+              Все симптомы
+            </th>
+
+            <v-sheet elevation="4" class="overflow-y-auto" max-height="650">
+              <v-simple-table dense>
+                <tbody>
+                  <tr
+                    @click="ClickSymptomForTableOnDialog(item.id, item.name)"
+                    v-for="item in SymptomAndType"
+                    :key="item"
+                  >
+                    <td class="py-2">{{ item.name }}</td>
+                    <td class="py-2 font-weight-medium">
+                      {{ item.tableLink }}
+                    </td>
+
+                    <td class="py-2 font-weight-medium">
+                      <v-menu offset-y>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            color="green"
+                            dark
+                            v-bind="attrs"
+                            v-on="on"
+                            @click="SymptomIdForChangeType(item.id)"
+                          >
+                            {{ item.TypeName }}
+                          </v-btn>
+                        </template>
+                        <v-list>
+                          <v-list-item
+                            v-for="(item, id) in AllType"
+                            :key="id"
+                            link
+                            @click="onChangeSelectedType(item.id)"
+                          >
+                            <v-list-item-title>{{
+                              item.name
+                            }}</v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-menu>
+                    </td>
+                  </tr>
+                </tbody>
+              </v-simple-table>
+            </v-sheet>
+          </v-col>
+        </v-row>
+      </v-tab-item>
+      <v-tab-item :key="4">
+        <v-row class="pt-3">
+          <v-col>
+            <th class="text-left text-uppercase font-weight-regular px-3">
               Версия базы данных: {{ BdVersion }}
             </th>
           </v-col>
@@ -244,6 +278,7 @@ export default {
           value: "name",
         },
       ],
+      TypeSelectedToChange: null,
       frequency: null,
       IdIllnessToChange: null,
       IdSymptomToChange: null,
@@ -280,9 +315,22 @@ export default {
       IllnessStringTable: null,
       AllType: null,
       BdVersion: null,
+      SymptomAndType: null,
+      SymptomIdForChangeTypeInt: null,
     };
   },
   methods: {
+    SymptomIdForChangeType(id) {
+      this.SymptomIdForChangeTypeInt = id;
+    },
+    onChangeSelectedType(id) {
+      this.axios.get(
+        "http://192.168.1.110:8001/api/ChangeType/" +
+          this.SymptomIdForChangeTypeInt +
+          "/" +
+          id
+      );
+    },
     ChangeToYes() {
       this.axios.get(
         "http://192.168.1.110:8001/api/ChangeToYes/" +
@@ -474,6 +522,9 @@ export default {
     this.axios
       .get("http://192.168.1.110:8001/api/ReturnBdVersion")
       .then((response) => (this.BdVersion = response.data));
+    this.axios
+      .get("http://192.168.1.110:8001/api/ReturnSymptomAndType")
+      .then((response) => (this.SymptomAndType = response.data));
   },
 };
 </script>
