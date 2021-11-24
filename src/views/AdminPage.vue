@@ -250,19 +250,24 @@
         <v-row class="pt-3">
           <v-col>
             <v-container>
-              <p class="text-left text-uppercase font-weight-regular">
-                Версия базы данных: 
-              </p>
-              <p class="text-left text-uppercase font-weight-bold">
-                {{ BdVersion }}
-              </p>
-              <p class="text-left text-uppercase font-weight-regular">
-                Название выбранной базы данных: 
-              </p>
-              <p class="text-left text-uppercase font-weight-bold">
-                {{ CurrentBD }}
-              </p>
-              <p>Загрузите базу данных или выберите из существующих:</p>
+              <v-row class="pa-4"
+                ><p class="text-left text-uppercase font-weight-regular">
+                  Версия базы данных:&nbsp;
+                </p>
+                <p class="text-left text-uppercase font-weight-bold">
+                  {{ BdVersion }}
+                </p>
+              </v-row>
+              <v-row class="pa-4">
+                <p class="text-left text-uppercase font-weight-regular">
+                  Выбранная база данных:&nbsp;
+                </p>
+                <p class="text-left text-uppercase font-weight-bold">
+                  {{ CurrentBD }}
+                </p>
+              </v-row>
+
+              <p>Загрузите базу данных</p>
               <v-file-input
                 v-model="file"
                 color="green darken-2"
@@ -270,6 +275,7 @@
                 ref="file"
                 label="Нажмите, чтобы загрузить свою базу данных"
               ></v-file-input>
+              <p>Выберите базу данных для отображения всем пользователям:</p>
               <v-select
                 class="px-4"
                 v-model="selected"
@@ -347,7 +353,7 @@ export default {
     };
   },
   methods: {
-    onChangeSelectedDB(){
+    onChangeSelectedDB() {
       this.axios
         .get("http://192.168.1.110:8001/api/ChangeSelectedBD/" + this.selected)
         .then((response) => (this.StatusChangeSelectedBD = response.data));
@@ -571,7 +577,7 @@ export default {
     this.axios
       .get("http://192.168.1.110:8001/api/GetCurrentBD")
       .then((response) => (this.CurrentBD = response.data));
-    this.ClickSymptomForTable(1,0)
+    this.ClickSymptomForTable(1, 0);
   },
 };
 </script>
