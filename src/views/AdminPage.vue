@@ -262,8 +262,14 @@
                 label="Нажмите, чтобы загрузить свою базу данных"
               ></v-file-input>
               <v-select
-                color="green darken-2"
-                :items="items"
+                class="px-4"
+                v-model="selected"
+                @change="onChangeSelectedDB()"
+                color="green"
+                required
+                :items="ListDB"
+                item-text="name"
+                item-value="id"
                 label="Нажмите, чтобы выбрать существующую БД"
               ></v-select>
             </v-container>
@@ -326,9 +332,16 @@ export default {
       BdVersion: null,
       SymptomAndType: null,
       SymptomIdForChangeTypeInt: null,
+      ListDB: null,
+      StatusChangeSelectedBD: null,
     };
   },
   methods: {
+    onChangeSelectedDB(){
+      this.axios
+        .get("http://192.168.1.110:8001/api/ChangeSelectedBD/" + this.selected)
+        .then((response) => (this.StatusChangeSelectedBD = response.data));
+    },
     ReturnSymptomAndType() {
       this.axios
         .get("http://192.168.1.110:8001/api/ReturnSymptomAndType")
@@ -436,7 +449,7 @@ export default {
       this.SymptomId = null;
       (this.visibleSelectedSimptom = false),
         this.axios
-          .get("http://192.168.1.110:8001/api/AllIllness/")
+          .get("http://192.168.1.110:8001/api/AdminAllIllness")
           .then((response) => (this.AllIllness = response.data));
       this.axios
         .get("http://192.168.1.110:8001/api/AllSymptom")
@@ -528,11 +541,8 @@ export default {
       .get("http://192.168.1.110:8001/api/AllSymptom")
       .then((response) => (this.AllSymptom = response.data));
     this.axios
-      .get("http://192.168.1.110:8001/api/AllIllness/")
+      .get("http://192.168.1.110:8001/api/AdminAllIllness")
       .then((response) => (this.AllIllness = response.data));
-    this.axios
-      .get("http://192.168.1.110:8001/api/SelectedSymptom")
-      .then((response) => (this.SymptomId = response.data));
     this.axios
       .get("http://192.168.1.110:8001/api/AllTable")
       .then((response) => (this.AllTable = response.data));
@@ -542,6 +552,9 @@ export default {
     this.axios
       .get("http://192.168.1.110:8001/api/ReturnBdVersion")
       .then((response) => (this.BdVersion = response.data));
+    this.axios
+      .get("http://192.168.1.110:8001/api/GetListOfDB")
+      .then((response) => (this.ListDB = response.data));
     this.axios
       .get("http://192.168.1.110:8001/api/ReturnSymptomAndType")
       .then((response) => (this.SymptomAndType = response.data));
