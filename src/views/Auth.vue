@@ -63,46 +63,26 @@ export default {
       password: "",
       errorPassOrUserName: false,
     };
+    
   },
   methods: {
     login(event) {
       event.preventDefault();
       this.axios
-        .post(`http://192.168.43.82:8001/api/v1/auth-token/token/login`, {
+        .post(`http://192.168.1.110:8001/auth/token`, {
           username: this.username,
           password: this.password,
         })
         .then((response) => {
-          this.setLogined(response.data.auth_token);
+          this.setLogined(response.data.token);
         })
         .catch((err) => {
           console.error(err), (this.errorPassOrUserName = true);
         });
     },
-    setLogined(auth_token) {
-      localStorage.setItem("auth_token", auth_token),
-        this.axios
-          .post(
-            "http://192.168.43.82:8001/api/v1/user/by/token/",
-            {},
-            {
-              headers: {
-                Authorization: "Token " + auth_token,
-              },
-            }
-          )
-
-          .then((response) => {
-            this.setData(response.data.username);
-          })
-          .catch((err) => {
-            console.error(err);
-          });
-    },
-    setData(username) {
-      localStorage.setItem("username", username);
-
-      this.$router.push("/");
+    setLogined(token) {
+      localStorage.setItem("token", token),
+      this.$router.push("/AdminPage");
     },
   },
 };

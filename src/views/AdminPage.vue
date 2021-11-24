@@ -350,12 +350,17 @@ export default {
       ListDB: null,
       StatusChangeSelectedBD: null,
       CurrentBD: null,
+      headerForRequest: {
+        headers: {
+          Authorization: "Token " + localStorage.token,
+        },
+      }
     };
   },
   methods: {
     onChangeSelectedDB() {
       this.axios
-        .get("http://192.168.1.110:8001/api/ChangeSelectedBD/" + this.selected)
+        .get("http://192.168.1.110:8001/api/ChangeSelectedBD/" + this.selected, this.headerForRequest)
         .then((response) => (this.StatusChangeSelectedBD = response.data));
     },
     ReturnSymptomAndType() {
@@ -372,7 +377,7 @@ export default {
           "http://192.168.1.110:8001/api/ChangeType/" +
             this.SymptomIdForChangeTypeInt +
             "/" +
-            id
+            id, this.headerForRequest
         )
         .then(
           (response) => (
@@ -385,7 +390,7 @@ export default {
         "http://192.168.1.110:8001/api/ChangeToYes/" +
           this.IdIllnessToChange +
           "/" +
-          this.IdSymptomToChange
+          this.IdSymptomToChange, this.headerForRequest
       ),
         this.ChangeStringTable();
     },
@@ -394,7 +399,7 @@ export default {
         "http://192.168.1.110:8001/api/ChangeToNo/" +
           this.IdIllnessToChange +
           "/" +
-          this.IdSymptomToChange
+          this.IdSymptomToChange, this.headerForRequest
       ),
         this.ChangeStringTable();
     },
@@ -403,7 +408,7 @@ export default {
         "http://192.168.1.110:8001/api/ChangeToMaybe/" +
           this.IdIllnessToChange +
           "/" +
-          this.IdSymptomToChange
+          this.IdSymptomToChange, this.headerForRequest
       ),
         this.ChangeStringTable();
     },
@@ -419,7 +424,7 @@ export default {
           "/" +
           this.TypeSelected +
           "/" +
-          this.ReliabilitySelected
+          this.ReliabilitySelected, this.headerForRequest
       );
     },
     SendNewIllness() {
@@ -566,10 +571,10 @@ export default {
       .get("http://192.168.1.110:8001/api/ReturnAllType")
       .then((response) => (this.AllType = response.data));
     this.axios
-      .get("http://192.168.1.110:8001/api/ReturnBdVersion")
+      .get("http://192.168.1.110:8001/api/ReturnBdVersion", this.headerForRequest)
       .then((response) => (this.BdVersion = response.data));
     this.axios
-      .get("http://192.168.1.110:8001/api/GetListOfDB")
+      .get("http://192.168.1.110:8001/api/GetListOfDB", this.headerForRequest)
       .then((response) => (this.ListDB = response.data));
     this.axios
       .get("http://192.168.1.110:8001/api/ReturnSymptomAndType")

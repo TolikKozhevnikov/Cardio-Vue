@@ -6,50 +6,46 @@
           <span>диагноз</span>
         </v-toolbar-title>
         <v-spacer></v-spacer>
+        <div v-if="elIsVisible">
+          <v-btn text class="text-uppercase" @click="goToPage()">Войти</v-btn>
+        </div>
+        <div v-else>
+          <v-btn text class="text-uppercase" @click="goToPage()">Выйти</v-btn>
+        </div>
         
-        <router-link class="text-uppercase" to="/Auth" tag="button">Войти</router-link>
+
       </v-app-bar>
     </div>
 </template>
 <script>
 export default {
   data: () => ({
-    username: localStorage.getItem("username"),
-    drawer: false,
-    elIsVisible: false,
-    group: null,
-    selectedItem: 0,
-    items: [
-      { text: "Главная страница", icon: "mdi-home", route: "/" },
-      { text: "Рентгенография", icon: "mdi-grain", route: "/Xnet" },
-      { text: "Профиль", icon: "mdi-account", route: "/Profile" },
-    ],
+    elIsVisible: null,
   }),
-  watch: {
-    group() {
-      this.drawer = false;
-    },
-  },
   updated() {
-    if (localStorage.getItem("auth_token") != null) {
+    if (localStorage.getItem("token") != null) {
       this.elIsVisible = false;
     } else {
       this.elIsVisible = true;
     }
   },
   methods: {
-    get() {
-      this.username = localStorage.getItem("username");
-    },
     goToPage() {
-      if (localStorage.getItem("auth_token") != null) {
-        this.$router.push("/Profile");
+      if (localStorage.getItem("token") != null) {
+        localStorage.removeItem("token")
+        this.elIsVisible = false;
+        this.$router.push("/Auth");
       } else {
         this.$router.push("/Auth");
+        this.elIsVisible = true;
       }
     },
     mounted() {
-      this.get();
+      if (localStorage.getItem("token") != null) {
+      this.elIsVisible = false;
+    } else {
+      this.elIsVisible = true;
+    }
     },
   },
 };
