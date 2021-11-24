@@ -5,9 +5,7 @@
       <v-tab :key="1">Диагностика по симптомам</v-tab>
       <v-tab :key="2">Диагностика по заболеваниям</v-tab>
       <v-tab-item :key="1">
-        
         <v-conteiner class="spacing-playground" fluid>
-          {{UserId}}
           <v-row class="pt-3">
             <v-col>
               <th class="text-left text-uppercase font-weight-regular px-3">
@@ -288,7 +286,11 @@ export default {
   },
   methods: {
     onChangeSelectedTask() {
-      this.idTypeSelected = this.selected;
+      if (this.selected != 0) {
+        this.idTypeSelected = this.selected;
+      } else {
+        this.idTypeSelected = null;
+      }
     },
     ChangeToYes() {
       this.axios.get(
@@ -360,7 +362,7 @@ export default {
     },
     CheckTheSymptom() {
       this.axios
-        .get("http://192.168.1.110:8001/api/CheckSymptom/"+ this.UserId)
+        .get("http://192.168.1.110:8001/api/CheckSymptom/" + this.UserId)
         .then((response) => (this.CheckSymptom = response.data));
     },
     DeleteAllSelectedIllness() {
@@ -371,11 +373,13 @@ export default {
       this.DeleteAllSelectedSymptom();
     },
     DeleteAllSelectedSymptom() {
-      this.axios.get("http://192.168.1.110:8001/api/DeleteSelectedSymptom/"+ this.UserId );
+      this.axios.get(
+        "http://192.168.1.110:8001/api/DeleteSelectedSymptom/" + this.UserId
+      );
       this.SymptomId = null;
       (this.visibleSelectedSimptom = false),
         this.axios
-          .get("http://192.168.1.110:8001/api/AllIllness/"+ this.UserId)
+          .get("http://192.168.1.110:8001/api/AllIllness/" + this.UserId)
           .then((response) => (this.AllIllness = response.data));
       this.axios
         .get("http://192.168.1.110:8001/api/AllSymptom")
@@ -399,7 +403,12 @@ export default {
     },
     ClickSymptom(id) {
       this.axios
-        .get("http://192.168.1.110:8001/api/PresentSymptom/"+ this.UserId + "/" + id)
+        .get(
+          "http://192.168.1.110:8001/api/PresentSymptom/" +
+            this.UserId +
+            "/" +
+            id
+        )
         .then(
           (response) => ((this.SymptomId = response.data), this.IllnessSearch())
         );
@@ -407,7 +416,7 @@ export default {
     },
     SymptomWithoutSelected() {
       this.axios
-        .get("http://192.168.1.110:8001/api/HintSymptom/"+ this.UserId)
+        .get("http://192.168.1.110:8001/api/HintSymptom/" + this.UserId)
         .then(
           (response) => (
             (this.AllSymptom = response.data), this.CheckTheSymptom()
@@ -417,7 +426,7 @@ export default {
     IllnessSearch() {
       this.AllIllness = null;
       this.axios
-        .get("http://192.168.1.110:8001/api/IllnessSearch/"+ this.UserId)
+        .get("http://192.168.1.110:8001/api/IllnessSearch/" + this.UserId)
         .then(
           (response) => (
             (this.AllIllness = response.data), this.SelectedSymptom()
@@ -426,7 +435,7 @@ export default {
     },
     SelectedSymptom() {
       this.axios
-        .get("http://192.168.1.110:8001/api/SelectedSymptom/"+ this.UserId)
+        .get("http://192.168.1.110:8001/api/SelectedSymptom/" + this.UserId)
         .then(
           (response) => (this.SymptomId = response.data),
           this.SymptomWithoutSelected()
@@ -434,7 +443,12 @@ export default {
     },
     DeleteSymptom(id) {
       this.axios
-        .get("http://192.168.1.110:8001/api/DeleteSymptom/"+ this.UserId + "/" + id)
+        .get(
+          "http://192.168.1.110:8001/api/DeleteSymptom/" +
+            this.UserId +
+            "/" +
+            id
+        )
         .then(
           (response) => (
             (this.SymptomId = response.data), this.SyptomAfterDelete()
@@ -445,11 +459,11 @@ export default {
       this.AllIllness = null;
       this.SymptomId = null;
       this.axios
-        .get("http://192.168.1.110:8001/api/SelectedSymptom/"+ this.UserId)
+        .get("http://192.168.1.110:8001/api/SelectedSymptom/" + this.UserId)
         .then((response) => (this.SymptomId = response.data));
 
       this.axios
-        .get("http://192.168.1.110:8001/api/IllnessSearch/"+ this.UserId)
+        .get("http://192.168.1.110:8001/api/IllnessSearch/" + this.UserId)
         .then(
           (response) => (this.AllIllness = response.data),
           this.SymptomWithoutSelected()
@@ -457,12 +471,12 @@ export default {
     },
   },
   mounted() {
-    if (localStorage.getItem('userId') == null) {
-    this.axios
-      .get("http://192.168.1.110:8001/api/GetUserId")
-      .then((response) => (localStorage.userId = response.data));
+    if (localStorage.getItem("userId") == null) {
+      this.axios
+        .get("http://192.168.1.110:8001/api/GetUserId")
+        .then((response) => (localStorage.userId = response.data));
     }
-    this.UserId = localStorage.userId
+    this.UserId = localStorage.userId;
     this.axios
       .get("http://192.168.1.110:8001/api/CountSymptom")
       .then((response) => (this.CountSymptom = response.data));
@@ -473,10 +487,10 @@ export default {
       .get("http://192.168.1.110:8001/api/AllSymptom")
       .then((response) => (this.AllSymptom = response.data));
     this.axios
-      .get("http://192.168.1.110:8001/api/AllIllness/"+ this.UserId)
+      .get("http://192.168.1.110:8001/api/AllIllness/" + this.UserId)
       .then((response) => (this.AllIllness = response.data));
     this.axios
-      .get("http://192.168.1.110:8001/api/SelectedSymptom/"+ this.UserId)
+      .get("http://192.168.1.110:8001/api/SelectedSymptom/" + this.UserId)
       .then((response) => (this.SymptomId = response.data));
     this.axios
       .get("http://192.168.1.110:8001/api/AllTable")
@@ -484,7 +498,6 @@ export default {
     this.axios
       .get("http://192.168.1.110:8001/api/ReturnAllType")
       .then((response) => (this.AllType = response.data));
-
   },
   computed: {
     todosByTitle() {
