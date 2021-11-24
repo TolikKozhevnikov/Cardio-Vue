@@ -251,7 +251,16 @@
           <v-col>
             <v-container>
               <p class="text-left text-uppercase font-weight-regular">
-                Версия базы данных: {{ BdVersion }}
+                Версия базы данных: 
+              </p>
+              <p class="text-left text-uppercase font-weight-bold">
+                {{ BdVersion }}
+              </p>
+              <p class="text-left text-uppercase font-weight-regular">
+                Название выбранной базы данных: 
+              </p>
+              <p class="text-left text-uppercase font-weight-bold">
+                {{ CurrentBD }}
               </p>
               <p>Загрузите базу данных или выберите из существующих:</p>
               <v-file-input
@@ -334,6 +343,7 @@ export default {
       SymptomIdForChangeTypeInt: null,
       ListDB: null,
       StatusChangeSelectedBD: null,
+      CurrentBD: null,
     };
   },
   methods: {
@@ -558,6 +568,9 @@ export default {
     this.axios
       .get("http://192.168.1.110:8001/api/ReturnSymptomAndType")
       .then((response) => (this.SymptomAndType = response.data));
+    this.axios
+      .get("http://192.168.1.110:8001/api/GetCurrentBD")
+      .then((response) => (this.CurrentBD = response.data));
     this.ClickSymptomForTable(1,0)
   },
 };
