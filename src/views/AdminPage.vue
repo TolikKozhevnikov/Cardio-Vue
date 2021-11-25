@@ -358,6 +358,9 @@ export default {
     };
   },
   methods: {
+    SendFile(){
+
+    },
     onChangeSelectedDB() {
       this.axios
         .get("http://192.168.1.110:8001/api/ChangeSelectedBD/" + this.selected, this.headerForRequest)
