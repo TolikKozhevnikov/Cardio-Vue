@@ -266,15 +266,26 @@
                   {{ CurrentBD }}
                 </p>
               </v-row>
+              <v-row class="pa-4">
+                <h5 class="font-weight-thin">
+                  
 
-              <p>Загрузите базу данных</p>
-              <v-file-input
-                v-model="file"
-                color="green darken-2"
-                v-on:change="handleFileUpload()"
-                ref="file"
-                label="Нажмите, чтобы загрузить свою базу данных"
-              ></v-file-input>
+                  <input
+                    type="file"
+                    id="file"
+                    ref="file"
+                    v-on:change="handleFileUpload()"
+                  />
+                </h5>
+                <v-btn
+                  color="success"
+                  text
+                  @click="dialog = false"
+                  v-on:click="submitFile()"
+                >
+                  Загрузить базу данных
+                </v-btn>
+              </v-row>
               <p>Выберите базу данных для отображения всем пользователям:</p>
               <v-select
                 class="px-4"
@@ -301,6 +312,7 @@ export default {
   data() {
     return {
       search: "",
+      file: null,
       headers: [
         {
           align: "start",
@@ -350,20 +362,44 @@ export default {
       ListDB: null,
       StatusChangeSelectedBD: null,
       CurrentBD: null,
+      name: "",
+      
+      info: "",
       headerForRequest: {
         headers: {
           Authorization: "Token " + localStorage.token,
         },
-      }
+      },
     };
   },
   methods: {
-    SendFile(){
+    submitFile() {
+      let formData = new FormData();
+      if (localStorage.getItem("username") == null) {
+        this.name = "NoName";
+      } else {
+        this.name = localStorage.getItem("username");
+      }
 
+      formData.append("title", this.name);
+      formData.append("file", this.file);
+      this.axios
+        .post("http://10.12.100.164:8000/api/FileUploadView", formData, this.headerForRequest)
+        .then((response) => (this.info = response.data))
+        .catch(function () {
+          console.log("FAILURE!!");
+        });
+      this.XnetIsComplite = false;
+    },
+    handleFileUpload() {
+      this.file = this.$refs.file.files[0];
     },
     onChangeSelectedDB() {
       this.axios
-        .get("http://10.12.100.164:8000/api/ChangeSelectedBD/" + this.selected, this.headerForRequest)
+        .get(
+          "http://10.12.100.164:8000/api/ChangeSelectedBD/" + this.selected,
+          this.headerForRequest
+        )
         .then((response) => (this.StatusChangeSelectedBD = response.data));
     },
     ReturnSymptomAndType() {
@@ -380,7 +416,8 @@ export default {
           "http://10.12.100.164:8000/api/ChangeType/" +
             this.SymptomIdForChangeTypeInt +
             "/" +
-            id, this.headerForRequest
+            id,
+          this.headerForRequest
         )
         .then(
           (response) => (
@@ -393,7 +430,8 @@ export default {
         "http://10.12.100.164:8000/api/ChangeToYes/" +
           this.IdIllnessToChange +
           "/" +
-          this.IdSymptomToChange, this.headerForRequest
+          this.IdSymptomToChange,
+        this.headerForRequest
       ),
         this.ChangeStringTable();
     },
@@ -402,7 +440,8 @@ export default {
         "http://10.12.100.164:8000/api/ChangeToNo/" +
           this.IdIllnessToChange +
           "/" +
-          this.IdSymptomToChange, this.headerForRequest
+          this.IdSymptomToChange,
+        this.headerForRequest
       ),
         this.ChangeStringTable();
     },
@@ -411,7 +450,8 @@ export default {
         "http://10.12.100.164:8000/api/ChangeToMaybe/" +
           this.IdIllnessToChange +
           "/" +
-          this.IdSymptomToChange, this.headerForRequest
+          this.IdSymptomToChange,
+        this.headerForRequest
       ),
         this.ChangeStringTable();
     },
@@ -427,7 +467,8 @@ export default {
           "/" +
           this.TypeSelected +
           "/" +
-          this.ReliabilitySelected, this.headerForRequest
+          this.ReliabilitySelected,
+        this.headerForRequest
       );
     },
     SendNewIllness() {
@@ -574,7 +615,10 @@ export default {
       .get("http://10.12.100.164:8000/api/ReturnAllType")
       .then((response) => (this.AllType = response.data));
     this.axios
-      .get("http://10.12.100.164:8000/api/ReturnBdVersion", this.headerForRequest)
+      .get(
+        "http://10.12.100.164:8000/api/ReturnBdVersion",
+        this.headerForRequest
+      )
       .then((response) => (this.BdVersion = response.data));
     this.axios
       .get("http://10.12.100.164:8000/api/GetListOfDB", this.headerForRequest)
