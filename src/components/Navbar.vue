@@ -22,13 +22,7 @@ export default {
   data: () => ({
     elIsVisible: null,
   }),
-  updated() {
-    if (localStorage.getItem("token") != null) {
-      this.elIsVisible = false;
-    } else {
-      this.elIsVisible = true;
-    }
-  },
+  
   methods: {
     goToPage() {
       if (localStorage.getItem("token") != null) {
@@ -40,6 +34,13 @@ export default {
         this.elIsVisible = true;
       }
     },
+    beforeMount(){
+    if (localStorage.getItem("token") != null) {
+      this.elIsVisible = false;
+    } else {
+      this.elIsVisible = true;
+    }
+    },
     mounted() {
       if (localStorage.getItem("token") != null) {
       this.elIsVisible = false;
@@ -47,6 +48,13 @@ export default {
       this.elIsVisible = true;
     }
     },
+    updated() {
+    if (localStorage.getItem("token") != null) {
+      this.elIsVisible = false;
+    } else {
+      this.elIsVisible = true;
+    }
+  },
   },
 };
 </script>

@@ -227,7 +227,7 @@
                         </template>
                         <v-list>
                           <v-list-item
-                            v-for="(item, id) in AllType"
+                            v-for="(item, id) in ReturnAllTypeWithoutAll"
                             :key="id"
                             link
                             @click="onChangeSelectedType(item.id)"
@@ -356,6 +356,7 @@ export default {
       CheckSymptom: null,
       IllnessStringTable: null,
       AllType: null,
+      ReturnAllTypeWithoutAll: null,
       BdVersion: null,
       SymptomAndType: null,
       SymptomIdForChangeTypeInt: null,
@@ -384,7 +385,7 @@ export default {
       formData.append("title", this.name);
       formData.append("file", this.file);
       this.axios
-        .post("http://10.12.100.164:8000/api/FileUploadView", formData, this.headerForRequest)
+        .post("http://127.0.0.1:8000/api/FileUploadView", formData, this.headerForRequest)
         .then((response) => (this.info = response.data))
         .catch(function () {
           console.log("FAILURE!!");
@@ -397,14 +398,14 @@ export default {
     onChangeSelectedDB() {
       this.axios
         .get(
-          "http://10.12.100.164:8000/api/ChangeSelectedBD/" + this.selected,
+          "http://127.0.0.1:8000/api/ChangeSelectedBD/" + this.selected,
           this.headerForRequest
         )
         .then((response) => (this.StatusChangeSelectedBD = response.data));
     },
     ReturnSymptomAndType() {
       this.axios
-        .get("http://10.12.100.164:8000/api/ReturnSymptomAndType")
+        .get("http://127.0.0.1:8000/api/ReturnSymptomAndType")
         .then((response) => (this.SymptomAndType = response.data));
     },
     SymptomIdForChangeType(id) {
@@ -413,7 +414,7 @@ export default {
     onChangeSelectedType(id) {
       this.axios
         .get(
-          "http://10.12.100.164:8000/api/ChangeType/" +
+          "http://127.0.0.1:8000/api/ChangeType/" +
             this.SymptomIdForChangeTypeInt +
             "/" +
             id,
@@ -427,7 +428,7 @@ export default {
     },
     ChangeToYes() {
       this.axios.get(
-        "http://10.12.100.164:8000/api/ChangeToYes/" +
+        "http://127.0.0.1:8000/api/ChangeToYes/" +
           this.IdIllnessToChange +
           "/" +
           this.IdSymptomToChange,
@@ -437,7 +438,7 @@ export default {
     },
     ChangeToNo() {
       this.axios.get(
-        "http://10.12.100.164:8000/api/ChangeToNo/" +
+        "http://127.0.0.1:8000/api/ChangeToNo/" +
           this.IdIllnessToChange +
           "/" +
           this.IdSymptomToChange,
@@ -447,7 +448,7 @@ export default {
     },
     ChangeToMaybe() {
       this.axios.get(
-        "http://10.12.100.164:8000/api/ChangeToMaybe/" +
+        "http://127.0.0.1:8000/api/ChangeToMaybe/" +
           this.IdIllnessToChange +
           "/" +
           this.IdSymptomToChange,
@@ -460,7 +461,7 @@ export default {
     },
     SendNewSymptom() {
       this.axios.get(
-        "http://10.12.100.164:8000/api/AddSymptom/" +
+        "http://127.0.0.1:8000/api/AddSymptom/" +
           this.nameSymptom +
           "/" +
           this.nameEngSymptom +
@@ -473,7 +474,7 @@ export default {
     },
     SendNewIllness() {
       this.axios.get(
-        "http://10.12.100.164:8000/api/AddIllness/" +
+        "http://127.0.0.1:8000/api/AddIllness/" +
           this.NameIllness +
           "/" +
           this.NameEngIllness +
@@ -494,12 +495,12 @@ export default {
       this.Illness = name;
       this.IllnessStringTable = null;
       this.axios
-        .get("http://10.12.100.164:8000/api/TableString/" + id)
+        .get("http://127.0.0.1:8000/api/TableString/" + id)
         .then((response) => (this.IllnessStringTable = response.data));
     },
     CheckTheSymptom() {
       this.axios
-        .get("http://10.12.100.164:8000/api/CheckSymptom")
+        .get("http://127.0.0.1:8000/api/CheckSymptom")
         .then((response) => (this.CheckSymptom = response.data));
     },
     DeleteAllSelectedIllness() {
@@ -510,21 +511,21 @@ export default {
       this.DeleteAllSelectedSymptom();
     },
     DeleteAllSelectedSymptom() {
-      this.axios.get("http://10.12.100.164:8000/api/DeleteSelectedSymptom");
+      this.axios.get("http://127.0.0.1:8000/api/DeleteSelectedSymptom");
       this.SymptomId = null;
       (this.visibleSelectedSimptom = false),
         this.axios
-          .get("http://10.12.100.164:8000/api/AdminAllIllness")
+          .get("http://127.0.0.1:8000/api/AdminAllIllness")
           .then((response) => (this.AllIllness = response.data));
       this.axios
-        .get("http://10.12.100.164:8000/api/AllSymptom")
+        .get("http://127.0.0.1:8000/api/AllSymptom")
         .then((response) => (this.AllSymptom = response.data));
     },
     ClickIllness(id, name) {
       this.illnessSelected = name;
       this.flagSimptom = true;
       this.axios
-        .get("http://10.12.100.164:8000/api/PresentIllness1/" + id)
+        .get("http://127.0.0.1:8000/api/PresentIllness1/" + id)
         .then(
           (response) => (
             (this.AllIllness1 = response.data), this.SearchIllness2(id)
@@ -533,12 +534,12 @@ export default {
     },
     SearchIllness2(id) {
       this.axios
-        .get("http://10.12.100.164:8000/api/PresentIllness2/" + id)
+        .get("http://127.0.0.1:8000/api/PresentIllness2/" + id)
         .then((response) => (this.AllIllness2 = response.data));
     },
     ClickSymptom(id) {
       this.axios
-        .get("http://10.12.100.164:8000/api/PresentSymptom/" + id)
+        .get("http://127.0.0.1:8000/api/PresentSymptom/" + id)
         .then(
           (response) => ((this.SymptomId = response.data), this.IllnessSearch())
         );
@@ -546,7 +547,7 @@ export default {
     },
     SymptomWithoutSelected() {
       this.axios
-        .get("http://10.12.100.164:8000/api/HintSymptom")
+        .get("http://127.0.0.1:8000/api/HintSymptom")
         .then(
           (response) => (
             (this.AllSymptom = response.data), this.CheckTheSymptom()
@@ -556,7 +557,7 @@ export default {
     IllnessSearch() {
       this.AllIllness = null;
       this.axios
-        .get("http://10.12.100.164:8000/api/IllnessSearch")
+        .get("http://127.0.0.1:8000/api/IllnessSearch")
         .then(
           (response) => (
             (this.AllIllness = response.data), this.SelectedSymptom()
@@ -565,7 +566,7 @@ export default {
     },
     SelectedSymptom() {
       this.axios
-        .get("http://10.12.100.164:8000/api/SelectedSymptom")
+        .get("http://127.0.0.1:8000/api/SelectedSymptom")
         .then(
           (response) => (this.SymptomId = response.data),
           this.SymptomWithoutSelected()
@@ -573,7 +574,7 @@ export default {
     },
     DeleteSymptom(id) {
       this.axios
-        .get("http://10.12.100.164:8000/api/DeleteSymptom/" + id)
+        .get("http://127.0.0.1:8000/api/DeleteSymptom/" + id)
         .then(
           (response) => (
             (this.SymptomId = response.data), this.SyptomAfterDelete()
@@ -584,11 +585,11 @@ export default {
       this.AllIllness = null;
       this.SymptomId = null;
       this.axios
-        .get("http://10.12.100.164:8000/api/SelectedSymptom")
+        .get("http://127.0.0.1:8000/api/SelectedSymptom")
         .then((response) => (this.SymptomId = response.data));
 
       this.axios
-        .get("http://10.12.100.164:8000/api/IllnessSearch")
+        .get("http://127.0.0.1:8000/api/IllnessSearch")
         .then(
           (response) => (this.AllIllness = response.data),
           this.SymptomWithoutSelected()
@@ -597,37 +598,40 @@ export default {
   },
   mounted() {
     this.axios
-      .get("http://10.12.100.164:8000/api/CountSymptom")
+      .get("http://127.0.0.1:8000/api/CountSymptom")
       .then((response) => (this.CountSymptom = response.data));
     this.axios
-      .get("http://10.12.100.164:8000/api/CountIllness")
+      .get("http://127.0.0.1:8000/api/CountIllness")
       .then((response) => (this.CountIllness = response.data));
     this.axios
-      .get("http://10.12.100.164:8000/api/AllSymptom")
+      .get("http://127.0.0.1:8000/api/AllSymptom")
       .then((response) => (this.AllSymptom = response.data));
     this.axios
-      .get("http://10.12.100.164:8000/api/AdminAllIllness")
+      .get("http://127.0.0.1:8000/api/AdminAllIllness")
       .then((response) => (this.AllIllness = response.data));
     this.axios
-      .get("http://10.12.100.164:8000/api/AllTable")
+      .get("http://127.0.0.1:8000/api/AllTable")
       .then((response) => (this.AllTable = response.data));
     this.axios
-      .get("http://10.12.100.164:8000/api/ReturnAllType")
+      .get("http://127.0.0.1:8000/api/ReturnAllType")
       .then((response) => (this.AllType = response.data));
     this.axios
+      .get("http://127.0.0.1:8000/api/ReturnAllTypeWithoutAll")
+      .then((response) => (this.ReturnAllTypeWithoutAll = response.data));
+    this.axios
       .get(
-        "http://10.12.100.164:8000/api/ReturnBdVersion",
+        "http://127.0.0.1:8000/api/ReturnBdVersion",
         this.headerForRequest
       )
       .then((response) => (this.BdVersion = response.data));
     this.axios
-      .get("http://10.12.100.164:8000/api/GetListOfDB", this.headerForRequest)
+      .get("http://127.0.0.1:8000/api/GetListOfDB", this.headerForRequest)
       .then((response) => (this.ListDB = response.data));
     this.axios
-      .get("http://10.12.100.164:8000/api/ReturnSymptomAndType")
+      .get("http://127.0.0.1:8000/api/ReturnSymptomAndType")
       .then((response) => (this.SymptomAndType = response.data));
     this.axios
-      .get("http://10.12.100.164:8000/api/GetCurrentBD")
+      .get("http://127.0.0.1:8000/api/GetCurrentBD")
       .then((response) => (this.CurrentBD = response.data));
     this.ClickSymptomForTable(1, 0);
   },
