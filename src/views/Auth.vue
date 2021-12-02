@@ -68,7 +68,7 @@ export default {
     login(event) {
       event.preventDefault();
       this.axios
-        .post(`http://10.12.100.164:8000/auth/token`, {
+        .post(`http://10.12.100.164:8001/auth/token`, {
           username: this.username,
           password: this.password,
         })
