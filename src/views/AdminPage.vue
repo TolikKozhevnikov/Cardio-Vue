@@ -251,7 +251,6 @@
           <v-row class="pa-4">
             <v-col>
               <v-card>
-      
                 <v-container>
                   <v-row class="px-4 mt-4">
                     <p class="text-left font-weight-regular">
@@ -287,7 +286,6 @@
             </v-col>
             <v-col>
               <v-card>
-      
                 <v-container>
                   <v-row class="px-4 mt-4">
                     <p class="text-left font-weight-regular">
@@ -309,8 +307,8 @@
                     <p>Выберите базу данных для редактирования:</p>
                   </v-row>
                   <v-select
-                    v-model="selected"
-                    @change="onChangeSelectedDB()"
+                    v-model="selectedForAdmin"
+                    @change="onChangeSelectedDBForAdmin()"
                     color="green"
                     required
                     :items="ListDB"
@@ -441,17 +439,34 @@ export default {
     handleFileUpload() {
       this.file = this.$refs.file.files[0];
     },
+    onChangeSelectedDBForAdmin() {
+      this.axios
+        .get(
+          "http://127.0.0.1:8000/api/ChangeSelectedBDForAdmin/" +
+            this.selectedForAdmin,
+          this.headerForRequest
+        )
+        .then(
+          (response) => (
+            (this.StatusChangeSelectedBD = response.data), this.CheckCurrent()
+          )
+        );
+    },
     onChangeSelectedDB() {
       this.axios
         .get(
           "http://127.0.0.1:8000/api/ChangeSelectedBD/" + this.selected,
           this.headerForRequest
         )
-        .then((response) => (this.StatusChangeSelectedBD = response.data, this.CheckCurrent()));
+        .then(
+          (response) => (
+            (this.StatusChangeSelectedBD = response.data), this.CheckCurrent()
+          )
+        );
     },
     ReturnSymptomAndType() {
       this.axios
-        .get("http://127.0.0.1:8000/api/ReturnSymptomAndType")
+        .get("http://127.0.0.1:8000/api/ReturnSymptomAndTypeForAdmin")
         .then((response) => (this.SymptomAndType = response.data));
     },
     SymptomIdForChangeType(id) {
@@ -541,7 +556,7 @@ export default {
       this.Illness = name;
       this.IllnessStringTable = null;
       this.axios
-        .get("http://127.0.0.1:8000/api/TableString/" + id)
+        .get("http://127.0.0.1:8000/api/TableStringForAdmin/" + id)
         .then((response) => (this.IllnessStringTable = response.data));
     },
     CheckTheSymptom() {
@@ -564,7 +579,7 @@ export default {
           .get("http://127.0.0.1:8000/api/AdminAllIllness")
           .then((response) => (this.AllIllness = response.data));
       this.axios
-        .get("http://127.0.0.1:8000/api/AllSymptom")
+        .get("http://127.0.0.1:8000/api/AllSymptomForAdmin")
         .then((response) => (this.AllSymptom = response.data));
     },
     ClickIllness(id, name) {
@@ -647,39 +662,86 @@ export default {
         .then((response) => (this.CurrentBD = response.data));
       this.axios
         .get("http://127.0.0.1:8000/api/GetCurrentBDForAdmin")
+        .then((response) => (this.GetCurrentBDForAdmin = response.data, this.ReloadAll()));
+    },
+    ReloadAll() {
+      this.axios
+        .get("http://127.0.0.1:8000/api/CountSymptomForAdmin")
+        .then((response) => (this.CountSymptom = response.data));
+      this.axios
+        .get("http://127.0.0.1:8000/api/CountIllnessForAdmin")
+        .then((response) => (this.CountIllness = response.data));
+      this.axios
+        .get("http://127.0.0.1:8000/api/AllSymptomForAdmin")
+        .then((response) => (this.AllSymptom = response.data));
+      this.axios
+        .get("http://127.0.0.1:8000/api/AdminAllIllness")
+        .then((response) => (this.AllIllness = response.data));
+      this.axios
+        .get("http://127.0.0.1:8000/api/AllTableForAdmin")
+        .then((response) => (this.AllTable = response.data));
+      this.axios
+        .get("http://127.0.0.1:8000/api/ReturnAllTypeForAdmin")
+        .then((response) => (this.AllType = response.data));
+      this.axios
+        .get("http://127.0.0.1:8000/api/ReturnAllTypeWithoutAll")
+        .then((response) => (this.ReturnAllTypeWithoutAll = response.data));
+      this.axios
+        .get(
+          "http://127.0.0.1:8000/api/ReturnBdVersionForAdmin",
+          this.headerForRequest
+        )
+        .then((response) => (this.BdVersion = response.data));
+      this.axios
+        .get("http://127.0.0.1:8000/api/GetListOfDB", this.headerForRequest)
+        .then((response) => (this.ListDB = response.data));
+      this.axios
+        .get("http://127.0.0.1:8000/api/ReturnSymptomAndTypeForAdmin")
+        .then((response) => (this.SymptomAndType = response.data));
+      this.axios
+        .get("http://127.0.0.1:8000/api/GetCurrentBD")
+        .then((response) => (this.CurrentBD = response.data));
+      this.axios
+        .get("http://127.0.0.1:8000/api/GetCurrentBDForAdmin")
         .then((response) => (this.GetCurrentBDForAdmin = response.data));
+
+      this.ClickSymptomForTable(1, 0);
     },
   },
+
   mounted() {
     this.axios
-      .get("http://127.0.0.1:8000/api/CountSymptom")
+      .get("http://127.0.0.1:8000/api/CountSymptomForAdmin")
       .then((response) => (this.CountSymptom = response.data));
     this.axios
-      .get("http://127.0.0.1:8000/api/CountIllness")
+      .get("http://127.0.0.1:8000/api/CountIllnessForAdmin")
       .then((response) => (this.CountIllness = response.data));
     this.axios
-      .get("http://127.0.0.1:8000/api/AllSymptom")
+      .get("http://127.0.0.1:8000/api/AllSymptomForAdmin")
       .then((response) => (this.AllSymptom = response.data));
     this.axios
       .get("http://127.0.0.1:8000/api/AdminAllIllness")
       .then((response) => (this.AllIllness = response.data));
     this.axios
-      .get("http://127.0.0.1:8000/api/AllTable")
+      .get("http://127.0.0.1:8000/api/AllTableForAdmin")
       .then((response) => (this.AllTable = response.data));
     this.axios
-      .get("http://127.0.0.1:8000/api/ReturnAllType")
+      .get("http://127.0.0.1:8000/api/ReturnAllTypeForAdmin")
       .then((response) => (this.AllType = response.data));
     this.axios
       .get("http://127.0.0.1:8000/api/ReturnAllTypeWithoutAll")
       .then((response) => (this.ReturnAllTypeWithoutAll = response.data));
     this.axios
-      .get("http://127.0.0.1:8000/api/ReturnBdVersion", this.headerForRequest)
+      .get(
+        "http://127.0.0.1:8000/api/ReturnBdVersionForAdmin",
+        this.headerForRequest
+      )
       .then((response) => (this.BdVersion = response.data));
     this.axios
       .get("http://127.0.0.1:8000/api/GetListOfDB", this.headerForRequest)
       .then((response) => (this.ListDB = response.data));
     this.axios
-      .get("http://127.0.0.1:8000/api/ReturnSymptomAndType")
+      .get("http://127.0.0.1:8000/api/ReturnSymptomAndTypeForAdmin")
       .then((response) => (this.SymptomAndType = response.data));
     this.axios
       .get("http://127.0.0.1:8000/api/GetCurrentBD")

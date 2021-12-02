@@ -44,9 +44,7 @@
             </v-btn>
 
             <v-row align="center" justify="center">
-              <p class="mt-3">
-               
-              </p>
+              <p class="mt-3"></p>
             </v-row>
           </b-form>
         </v-card>
@@ -63,9 +61,10 @@ export default {
       password: "",
       errorPassOrUserName: false,
     };
-    
   },
+
   methods: {
+    
     login(event) {
       event.preventDefault();
       this.axios
@@ -81,8 +80,7 @@ export default {
         });
     },
     setLogined(token) {
-      localStorage.setItem("token", token),
-      this.$router.push("/AdminPage");
+      localStorage.setItem("token", token), this.$router.push("/AdminPage");
     },
   },
 };

@@ -273,7 +273,7 @@ export default {
       SymptomId: null,
       dsf: null,
       dataFlag: true,
-      visibleSelectedSimptom: false,
+      visibleSelectedSimptom: null,
       illnessSelected: null,
       flagSimptom: false,
       CheckSymptom: null,
@@ -498,6 +498,9 @@ export default {
     this.axios
       .get("http://127.0.0.1:8000/api/ReturnAllType")
       .then((response) => (this.AllType = response.data));
+    if (this.SymptomId != null) {
+      this.visibleSelectedSimptom = true
+    }
   },
   computed: {
     todosByTitle() {

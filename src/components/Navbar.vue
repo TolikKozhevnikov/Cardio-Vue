@@ -22,24 +22,12 @@ export default {
   data: () => ({
     elIsVisible: null,
   }),
-  
-  methods: {
-    goToPage() {
+  updated() {
       if (localStorage.getItem("token") != null) {
-        localStorage.removeItem("token")
         this.elIsVisible = false;
-        this.$router.push("/Auth");
       } else {
-        this.$router.push("/Auth");
         this.elIsVisible = true;
       }
-    },
-    beforeMount(){
-    if (localStorage.getItem("token") != null) {
-      this.elIsVisible = false;
-    } else {
-      this.elIsVisible = true;
-    }
     },
     mounted() {
       if (localStorage.getItem("token") != null) {
@@ -47,14 +35,21 @@ export default {
     } else {
       this.elIsVisible = true;
     }
-    },
-    updated() {
-    if (localStorage.getItem("token") != null) {
-      this.elIsVisible = false;
-    } else {
-      this.elIsVisible = true;
-    }
   },
+  methods: {
+    goToPage() {
+      if (localStorage.getItem("token") != null) {
+        localStorage.removeItem("token")
+        this.elIsVisible = false;
+        this.$router.push("/Auth");
+      } else {
+        this.elIsVisible = true;
+        this.$router.push("/Auth");
+        
+      }
+    
+    },
+    
   },
 };
 </script>
