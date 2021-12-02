@@ -247,60 +247,101 @@
         </v-row>
       </v-tab-item>
       <v-tab-item :key="4">
-        <v-row class="pt-3">
-          <v-col>
-            <v-container>
-              <v-row class="pa-4"
-                ><p class="text-left text-uppercase font-weight-regular">
-                  Версия базы данных:&nbsp;
-                </p>
-                <p class="text-left text-uppercase font-weight-bold">
-                  {{ BdVersion }}
-                </p>
-              </v-row>
-              <v-row class="pa-4">
-                <p class="text-left text-uppercase font-weight-regular">
-                  Выбранная база данных:&nbsp;
-                </p>
-                <p class="text-left text-uppercase font-weight-bold">
-                  {{ CurrentBD }}
-                </p>
-              </v-row>
-              <v-row class="pa-4">
-                <h5 class="font-weight-thin">
-                  
-
-                  <input
-                    type="file"
-                    id="file"
-                    ref="file"
-                    v-on:change="handleFileUpload()"
-                  />
-                </h5>
-                <v-btn
-                  color="success"
-                  text
-                  @click="dialog = false"
-                  v-on:click="submitFile()"
-                >
-                  Загрузить базу данных
-                </v-btn>
-              </v-row>
-              <p>Выберите базу данных для отображения всем пользователям:</p>
-              <v-select
-                class="px-4"
-                v-model="selected"
-                @change="onChangeSelectedDB()"
-                color="green"
-                required
-                :items="ListDB"
-                item-text="name"
-                item-value="id"
-                label="Нажмите, чтобы выбрать существующую БД"
-              ></v-select>
-            </v-container>
-          </v-col>
-        </v-row>
+        <v-conteiner>
+          <v-row class="pa-4">
+            <v-col>
+              <v-card>
+      
+                <v-container>
+                  <v-row class="px-4 mt-4">
+                    <p class="text-left font-weight-regular">
+                      Выбранная база данных для пользователей:&nbsp;
+                    </p>
+                    <p class="text-left text-uppercase font-weight-bold">
+                      {{ CurrentBD }}
+                    </p>
+                  </v-row>
+                  <v-row class="pa-4"
+                    ><p class="text-left font-weight-regular">
+                      Версия базы данных:&nbsp;
+                    </p>
+                    <p class="text-left text-uppercase font-weight-bold">
+                      {{ BdVersion }}
+                    </p>
+                  </v-row>
+                  <v-row class="px-4 mt-4">
+                    <p>Выберите базу данных для отображения пользователям:</p>
+                  </v-row>
+                  <v-select
+                    v-model="selected"
+                    @change="onChangeSelectedDB()"
+                    color="green"
+                    required
+                    :items="ListDB"
+                    item-text="name"
+                    item-value="id"
+                    label="Нажмите, чтобы выбрать существующую БД"
+                  ></v-select>
+                </v-container>
+              </v-card>
+            </v-col>
+            <v-col>
+              <v-card>
+      
+                <v-container>
+                  <v-row class="px-4 mt-4">
+                    <p class="text-left font-weight-regular">
+                      Выбранная база данных для редактирования:&nbsp;
+                    </p>
+                    <p class="text-left text-uppercase font-weight-bold">
+                      {{ GetCurrentBDForAdmin }}
+                    </p>
+                  </v-row>
+                  <v-row class="pa-4"
+                    ><p class="text-left font-weight-regular">
+                      Версия базы данных:&nbsp;
+                    </p>
+                    <p class="text-left text-uppercase font-weight-bold">
+                      {{ BdVersion }}
+                    </p>
+                  </v-row>
+                  <v-row class="px-4 mt-4">
+                    <p>Выберите базу данных для редактирования:</p>
+                  </v-row>
+                  <v-select
+                    v-model="selected"
+                    @change="onChangeSelectedDB()"
+                    color="green"
+                    required
+                    :items="ListDB"
+                    item-text="name"
+                    item-value="id"
+                    label="Нажмите, чтобы выбрать существующую БД"
+                  ></v-select>
+                </v-container>
+              </v-card>
+            </v-col>
+          </v-row>
+          <v-row class="pa-4">
+            <h5 class="font-weight-thin">
+              <input
+                class="pa-4"
+                type="file"
+                id="file"
+                ref="file"
+                v-on:change="handleFileUpload()"
+              />
+            </h5>
+            <v-btn
+              color="success"
+              text
+              @click="dialog = false"
+              v-on:click="submitFile()"
+            >
+              Загрузить базу данных
+            </v-btn>
+          </v-row>
+        </v-conteiner>
       </v-tab-item>
     </v-tabs>
   </v-app>
@@ -362,9 +403,10 @@ export default {
       SymptomIdForChangeTypeInt: null,
       ListDB: null,
       StatusChangeSelectedBD: null,
+      GetCurrentBDForAdmin: null,
       CurrentBD: null,
       name: "",
-      
+
       info: "",
       headerForRequest: {
         headers: {
@@ -385,7 +427,11 @@ export default {
       formData.append("title", this.name);
       formData.append("file", this.file);
       this.axios
-        .post("http://127.0.0.1:8000/api/FileUploadView", formData, this.headerForRequest)
+        .post(
+          "http://127.0.0.1:8000/api/FileUploadView",
+          formData,
+          this.headerForRequest
+        )
         .then((response) => (this.info = response.data))
         .catch(function () {
           console.log("FAILURE!!");
@@ -401,7 +447,7 @@ export default {
           "http://127.0.0.1:8000/api/ChangeSelectedBD/" + this.selected,
           this.headerForRequest
         )
-        .then((response) => (this.StatusChangeSelectedBD = response.data));
+        .then((response) => (this.StatusChangeSelectedBD = response.data, this.CheckCurrent()));
     },
     ReturnSymptomAndType() {
       this.axios
@@ -595,6 +641,14 @@ export default {
           this.SymptomWithoutSelected()
         );
     },
+    CheckCurrent() {
+      this.axios
+        .get("http://127.0.0.1:8000/api/GetCurrentBD")
+        .then((response) => (this.CurrentBD = response.data));
+      this.axios
+        .get("http://127.0.0.1:8000/api/GetCurrentBDForAdmin")
+        .then((response) => (this.GetCurrentBDForAdmin = response.data));
+    },
   },
   mounted() {
     this.axios
@@ -619,10 +673,7 @@ export default {
       .get("http://127.0.0.1:8000/api/ReturnAllTypeWithoutAll")
       .then((response) => (this.ReturnAllTypeWithoutAll = response.data));
     this.axios
-      .get(
-        "http://127.0.0.1:8000/api/ReturnBdVersion",
-        this.headerForRequest
-      )
+      .get("http://127.0.0.1:8000/api/ReturnBdVersion", this.headerForRequest)
       .then((response) => (this.BdVersion = response.data));
     this.axios
       .get("http://127.0.0.1:8000/api/GetListOfDB", this.headerForRequest)
@@ -633,6 +684,10 @@ export default {
     this.axios
       .get("http://127.0.0.1:8000/api/GetCurrentBD")
       .then((response) => (this.CurrentBD = response.data));
+    this.axios
+      .get("http://127.0.0.1:8000/api/GetCurrentBDForAdmin")
+      .then((response) => (this.GetCurrentBDForAdmin = response.data));
+
     this.ClickSymptomForTable(1, 0);
   },
 };
