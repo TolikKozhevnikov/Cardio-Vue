@@ -314,7 +314,7 @@
                     :items="ListDB"
                     item-text="name"
                     item-value="id"
-                    label="Нажмите, чтобы выбрать существующую БД"
+                    label="Нажмите, чтобы выбрать БД для редактирования"
                   ></v-select>
                 </v-container>
               </v-card>
