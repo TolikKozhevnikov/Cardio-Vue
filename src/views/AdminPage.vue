@@ -1,6 +1,22 @@
     
 <template>
   <v-app>
+    <div>
+      <v-app-bar elevation="4" color="green lighten-4" dense>
+        <v-toolbar-title class="text-left text-uppercase font-weight-regular">
+          <span class="font-weight-light">Кардио</span>
+          <span>диагноз</span>
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn text class="text-uppercase" @click="goToUserPage()">Вернуться в диагностику</v-btn>
+        <div v-if="elIsVisible">
+          <v-btn text class="text-uppercase" @click="goToPage()">Войти</v-btn>
+        </div>
+        <div v-else>
+          <v-btn text class="text-uppercase" @click="goToPage()">Выйти</v-btn>
+        </div>
+      </v-app-bar>
+    </div>
     <v-tabs color="green darken-1">
       <v-tab :key="1">Заболевания / Все симптомы</v-tab>
       <v-tab :key="2">Добавить симптом / заболевание</v-tab>
@@ -350,7 +366,7 @@ export default {
   name: "App",
   data() {
     return {
-      url: 'http://127.0.0.1:8000/api',
+      url: "http://127.0.0.1:8000/api",
       search: "",
       file: null,
       headers: [
@@ -405,7 +421,7 @@ export default {
       GetCurrentBDForAdmin: null,
       CurrentBD: null,
       name: "",
-
+      elIsVisible: null,
       info: "",
       headerForRequest: {
         headers: {
@@ -426,11 +442,7 @@ export default {
       formData.append("title", this.name);
       formData.append("file", this.file);
       this.axios
-        .post(
-          this.url + "/FileUploadView",
-          formData,
-          this.headerForRequest
-        )
+        .post(this.url + "/FileUploadView", formData, this.headerForRequest)
         .then((response) => (this.info = response.data))
         .catch(function () {
           console.log("FAILURE!!");
@@ -443,8 +455,7 @@ export default {
     onChangeSelectedDBForAdmin() {
       this.axios
         .get(
-          this.url + "/ChangeSelectedBDForAdmin/" +
-            this.selectedForAdmin,
+          this.url + "/ChangeSelectedBDForAdmin/" + this.selectedForAdmin,
           this.headerForRequest
         )
         .then(
@@ -476,10 +487,7 @@ export default {
     onChangeSelectedType(id) {
       this.axios
         .get(
-          this.url + "/ChangeType/" +
-            this.SymptomIdForChangeTypeInt +
-            "/" +
-            id,
+          this.url + "/ChangeType/" + this.SymptomIdForChangeTypeInt + "/" + id,
           this.headerForRequest
         )
         .then(
@@ -490,7 +498,8 @@ export default {
     },
     ChangeToYes() {
       this.axios.get(
-        this.url + "/ChangeToYes/" +
+        this.url +
+          "/ChangeToYes/" +
           this.IdIllnessToChange +
           "/" +
           this.IdSymptomToChange,
@@ -500,7 +509,8 @@ export default {
     },
     ChangeToNo() {
       this.axios.get(
-        this.url + "/ChangeToNo/" +
+        this.url +
+          "/ChangeToNo/" +
           this.IdIllnessToChange +
           "/" +
           this.IdSymptomToChange,
@@ -510,7 +520,8 @@ export default {
     },
     ChangeToMaybe() {
       this.axios.get(
-        this.url + "/ChangeToMaybe/" +
+        this.url +
+          "/ChangeToMaybe/" +
           this.IdIllnessToChange +
           "/" +
           this.IdSymptomToChange,
@@ -523,7 +534,8 @@ export default {
     },
     SendNewSymptom() {
       this.axios.get(
-        this.url + "/AddSymptom/" +
+        this.url +
+          "/AddSymptom/" +
           this.nameSymptom +
           "/" +
           this.nameEngSymptom +
@@ -536,7 +548,8 @@ export default {
     },
     SendNewIllness() {
       this.axios.get(
-        this.url + "/AddIllness/" +
+        this.url +
+          "/AddIllness/" +
           this.NameIllness +
           "/" +
           this.NameEngIllness +
@@ -663,7 +676,11 @@ export default {
         .then((response) => (this.CurrentBD = response.data));
       this.axios
         .get(this.url + "/GetCurrentBDForAdmin")
-        .then((response) => (this.GetCurrentBDForAdmin = response.data, this.ReloadAll()));
+        .then(
+          (response) => (
+            (this.GetCurrentBDForAdmin = response.data), this.ReloadAll()
+          )
+        );
     },
     ReloadAll() {
       this.axios
@@ -688,10 +705,7 @@ export default {
         .get(this.url + "/ReturnAllTypeWithoutAll")
         .then((response) => (this.ReturnAllTypeWithoutAll = response.data));
       this.axios
-        .get(
-          this.url + "/ReturnBdVersionForAdmin",
-          this.headerForRequest
-        )
+        .get(this.url + "/ReturnBdVersionForAdmin", this.headerForRequest)
         .then((response) => (this.BdVersion = response.data));
       this.axios
         .get(this.url + "/GetListOfDB", this.headerForRequest)
@@ -708,9 +722,33 @@ export default {
 
       this.ClickSymptomForTable(1, 0);
     },
+    goToPage() {
+      if (localStorage.getItem("token") != null) {
+        localStorage.removeItem("token");
+        this.elIsVisible = false;
+        this.$router.push("/Auth");
+      } else {
+        this.elIsVisible = true;
+        this.$router.push("/Auth");
+      }
+    },
+    goToUserPage(){
+      this.$router.push("/UserPage");
+    },
   },
-
+  updated() {
+    if (localStorage.getItem("token") != null) {
+      this.elIsVisible = false;
+    } else {
+      this.elIsVisible = true;
+    }
+  },
   mounted() {
+    if (localStorage.getItem("token") != null) {
+      this.elIsVisible = false;
+    } else {
+      this.elIsVisible = true;
+    }
     this.axios
       .get(this.url + "/CountSymptomForAdmin")
       .then((response) => (this.CountSymptom = response.data));
@@ -733,10 +771,7 @@ export default {
       .get(this.url + "/ReturnAllTypeWithoutAll")
       .then((response) => (this.ReturnAllTypeWithoutAll = response.data));
     this.axios
-      .get(
-        this.url + "/ReturnBdVersionForAdmin",
-        this.headerForRequest
-      )
+      .get(this.url + "/ReturnBdVersionForAdmin", this.headerForRequest)
       .then((response) => (this.BdVersion = response.data));
     this.axios
       .get(this.url + "/GetListOfDB", this.headerForRequest)

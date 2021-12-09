@@ -1,6 +1,22 @@
     
 <template>
   <v-app>
+    <div>
+      <v-app-bar elevation="4" color="green lighten-4" dense>
+        <v-toolbar-title class="text-left text-uppercase font-weight-regular">
+          <span class="font-weight-light">Кардио</span>
+          <span>диагноз</span>
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <div v-if="elIsVisible">
+          <v-btn text class="text-uppercase" @click="goToPage()">Войти</v-btn>
+        </div>
+        <div v-else>
+          <v-btn text class="text-uppercase" @click="goToAdminPage()">Вернуться в администрирование</v-btn>
+          <v-btn text class="text-uppercase" @click="goToPage()">Выйти</v-btn>
+        </div>
+      </v-app-bar>
+    </div>
     <v-tabs color="green darken-1">
       <v-tab :key="1">Диагностика по симптомам</v-tab>
       <v-tab :key="2">Диагностика по заболеваниям</v-tab>
@@ -101,7 +117,7 @@
                 </v-simple-table>
               </v-sheet>
             </v-col>
-            
+
             <v-col>
               <div v-if="CheckSymptom != null">
                 <v-row v-if="CheckSymptom != 'not'" class="pa-3" align="center">
@@ -115,10 +131,7 @@
                     color="green"
                     >Добавить</v-btn
                   >
-                  <v-btn
-                    @click="CheckTheSymptom()"
-                    text
-                    color="green"
+                  <v-btn @click="CheckTheSymptom()" text color="green"
                     >Cледующий</v-btn
                   >
                 </v-row>
@@ -162,7 +175,7 @@
                   </th>
                 </v-row>
                 <v-row class="pt-3 mr-4">
-                  <v-card elevation='0' class="rounded-0 d-flex pa-2">
+                  <v-card elevation="0" class="rounded-0 d-flex pa-2">
                     <v-card-text class="black--text">
                       {{ illnessSelected }}
                     </v-card-text>
@@ -174,10 +187,7 @@
                   </th>
                 </v-row>
                 <v-row class="pt-3 mr-4">
-                  <v-sheet
-                    class="overflow-y-auto"
-                    max-height="220"
-                  >
+                  <v-sheet class="overflow-y-auto" max-height="220">
                     <v-simple-table dense>
                       <tbody>
                         <tr
@@ -195,11 +205,7 @@
                   <th class="text-left text-uppercase font-weight-regular px-3">
                     Симптомы которые могут быть:
                   </th>
-                  <v-sheet
-                  
-                    class="overflow-y-auto"
-                    max-height="220"
-                  >
+                  <v-sheet class="overflow-y-auto" max-height="220">
                     <v-simple-table dense>
                       <tbody>
                         <tr
@@ -241,7 +247,7 @@ export default {
   name: "App",
   data() {
     return {
-      url: 'http://127.0.0.1:8000/api',
+      url: "http://127.0.0.1:8000/api",
       search: "",
       headers: [
         {
@@ -250,6 +256,7 @@ export default {
           value: "name",
         },
       ],
+      elIsVisible: null,
       frequency: null,
       IdIllnessToChange: null,
       IdSymptomToChange: null,
@@ -300,7 +307,8 @@ export default {
     },
     ChangeToYes() {
       this.axios.get(
-        this.url + "/ChangeToYes/" +
+        this.url +
+          "/ChangeToYes/" +
           this.IdIllnessToChange +
           "/" +
           this.IdSymptomToChange
@@ -309,7 +317,8 @@ export default {
     },
     ChangeToNo() {
       this.axios.get(
-        this.url + "/ChangeToNo/" +
+        this.url +
+          "/ChangeToNo/" +
           this.IdIllnessToChange +
           "/" +
           this.IdSymptomToChange
@@ -318,7 +327,8 @@ export default {
     },
     ChangeToMaybe() {
       this.axios.get(
-        this.url + "/ChangeToMaybe/" +
+        this.url +
+          "/ChangeToMaybe/" +
           this.IdIllnessToChange +
           "/" +
           this.IdSymptomToChange
@@ -330,7 +340,8 @@ export default {
     },
     SendNewSymptom() {
       this.axios.get(
-        this.url + "/AddSymptom/" +
+        this.url +
+          "/AddSymptom/" +
           this.nameSymptom +
           "/" +
           this.nameEngSymptom +
@@ -342,7 +353,8 @@ export default {
     },
     SendNewIllness() {
       this.axios.get(
-        this.url + "/AddIllness/" +
+        this.url +
+          "/AddIllness/" +
           this.NameIllness +
           "/" +
           this.NameEngIllness +
@@ -379,9 +391,7 @@ export default {
       this.DeleteAllSelectedSymptom();
     },
     DeleteAllSelectedSymptom() {
-      this.axios.get(
-        this.url + "/DeleteSelectedSymptom/" + this.UserId
-      );
+      this.axios.get(this.url + "/DeleteSelectedSymptom/" + this.UserId);
       this.SymptomId = null;
       (this.visibleSelectedSimptom = false),
         this.axios
@@ -410,12 +420,7 @@ export default {
     },
     ClickSymptom(id) {
       this.axios
-        .get(
-          this.url + "/PresentSymptom/" +
-            this.UserId +
-            "/" +
-            id
-        )
+        .get(this.url + "/PresentSymptom/" + this.UserId + "/" + id)
         .then(
           (response) => ((this.SymptomId = response.data), this.IllnessSearch())
         );
@@ -450,12 +455,7 @@ export default {
     },
     DeleteSymptom(id) {
       this.axios
-        .get(
-          this.url + "/DeleteSymptom/" +
-            this.UserId +
-            "/" +
-            id
-        )
+        .get(this.url + "/DeleteSymptom/" + this.UserId + "/" + id)
         .then(
           (response) => (
             (this.SymptomId = response.data), this.SyptomAfterDelete()
@@ -476,8 +476,35 @@ export default {
           this.SymptomWithoutSelected()
         );
     },
+    goToPage() {
+      if (localStorage.getItem("token") != null) {
+        localStorage.removeItem("token")
+        this.elIsVisible = false;
+        this.$router.push("/Auth");
+      } else {
+        this.elIsVisible = true;
+        this.$router.push("/Auth");
+        
+      }
+    
+    },
+    goToAdminPage(){
+      this.$router.push("/AdminPage");
+    },
+  },
+  updated() {
+    if (localStorage.getItem("token") != null) {
+      this.elIsVisible = false;
+    } else {
+      this.elIsVisible = true;
+    }
   },
   mounted() {
+    if (localStorage.getItem("token") != null) {
+      this.elIsVisible = false;
+    } else {
+      this.elIsVisible = true;
+    }
     if (localStorage.getItem("userId") == null) {
       this.axios
         .get(this.url + "/GetUserId")
@@ -506,7 +533,7 @@ export default {
       .get(this.url + "/ReturnAllType")
       .then((response) => (this.AllType = response.data));
     if (this.SymptomId != null) {
-      this.visibleSelectedSimptom = true
+      this.visibleSelectedSimptom = true;
     }
   },
   computed: {
