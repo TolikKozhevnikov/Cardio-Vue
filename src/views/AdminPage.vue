@@ -350,6 +350,7 @@ export default {
   name: "App",
   data() {
     return {
+      url: 'http://127.0.0.1:8000/api',
       search: "",
       file: null,
       headers: [
@@ -426,7 +427,7 @@ export default {
       formData.append("file", this.file);
       this.axios
         .post(
-          "http://10.12.100.164:8001/api/FileUploadView",
+          this.url + "/FileUploadView",
           formData,
           this.headerForRequest
         )
@@ -442,7 +443,7 @@ export default {
     onChangeSelectedDBForAdmin() {
       this.axios
         .get(
-          "http://10.12.100.164:8001/api/ChangeSelectedBDForAdmin/" +
+          this.url + "/ChangeSelectedBDForAdmin/" +
             this.selectedForAdmin,
           this.headerForRequest
         )
@@ -455,7 +456,7 @@ export default {
     onChangeSelectedDB() {
       this.axios
         .get(
-          "http://10.12.100.164:8001/api/ChangeSelectedBD/" + this.selected,
+          this.url + "/ChangeSelectedBD/" + this.selected,
           this.headerForRequest
         )
         .then(
@@ -466,7 +467,7 @@ export default {
     },
     ReturnSymptomAndType() {
       this.axios
-        .get("http://10.12.100.164:8001/api/ReturnSymptomAndTypeForAdmin")
+        .get(this.url + "/ReturnSymptomAndTypeForAdmin")
         .then((response) => (this.SymptomAndType = response.data));
     },
     SymptomIdForChangeType(id) {
@@ -475,7 +476,7 @@ export default {
     onChangeSelectedType(id) {
       this.axios
         .get(
-          "http://10.12.100.164:8001/api/ChangeType/" +
+          this.url + "/ChangeType/" +
             this.SymptomIdForChangeTypeInt +
             "/" +
             id,
@@ -489,7 +490,7 @@ export default {
     },
     ChangeToYes() {
       this.axios.get(
-        "http://10.12.100.164:8001/api/ChangeToYes/" +
+        this.url + "/ChangeToYes/" +
           this.IdIllnessToChange +
           "/" +
           this.IdSymptomToChange,
@@ -499,7 +500,7 @@ export default {
     },
     ChangeToNo() {
       this.axios.get(
-        "http://10.12.100.164:8001/api/ChangeToNo/" +
+        this.url + "/ChangeToNo/" +
           this.IdIllnessToChange +
           "/" +
           this.IdSymptomToChange,
@@ -509,7 +510,7 @@ export default {
     },
     ChangeToMaybe() {
       this.axios.get(
-        "http://10.12.100.164:8001/api/ChangeToMaybe/" +
+        this.url + "/ChangeToMaybe/" +
           this.IdIllnessToChange +
           "/" +
           this.IdSymptomToChange,
@@ -522,7 +523,7 @@ export default {
     },
     SendNewSymptom() {
       this.axios.get(
-        "http://10.12.100.164:8001/api/AddSymptom/" +
+        this.url + "/AddSymptom/" +
           this.nameSymptom +
           "/" +
           this.nameEngSymptom +
@@ -535,7 +536,7 @@ export default {
     },
     SendNewIllness() {
       this.axios.get(
-        "http://10.12.100.164:8001/api/AddIllness/" +
+        this.url + "/AddIllness/" +
           this.NameIllness +
           "/" +
           this.NameEngIllness +
@@ -556,12 +557,12 @@ export default {
       this.Illness = name;
       this.IllnessStringTable = null;
       this.axios
-        .get("http://10.12.100.164:8001/api/TableStringForAdmin/" + id)
+        .get(this.url + "/TableStringForAdmin/" + id)
         .then((response) => (this.IllnessStringTable = response.data));
     },
     CheckTheSymptom() {
       this.axios
-        .get("http://10.12.100.164:8001/api/CheckSymptom")
+        .get(this.url + "/CheckSymptom")
         .then((response) => (this.CheckSymptom = response.data));
     },
     DeleteAllSelectedIllness() {
@@ -572,21 +573,21 @@ export default {
       this.DeleteAllSelectedSymptom();
     },
     DeleteAllSelectedSymptom() {
-      this.axios.get("http://10.12.100.164:8001/api/DeleteSelectedSymptom");
+      this.axios.get(this.url + "/DeleteSelectedSymptom");
       this.SymptomId = null;
       (this.visibleSelectedSimptom = false),
         this.axios
-          .get("http://10.12.100.164:8001/api/AdminAllIllness")
+          .get(this.url + "/AdminAllIllness")
           .then((response) => (this.AllIllness = response.data));
       this.axios
-        .get("http://10.12.100.164:8001/api/AllSymptomForAdmin")
+        .get(this.url + "/AllSymptomForAdmin")
         .then((response) => (this.AllSymptom = response.data));
     },
     ClickIllness(id, name) {
       this.illnessSelected = name;
       this.flagSimptom = true;
       this.axios
-        .get("http://10.12.100.164:8001/api/PresentIllness1/" + id)
+        .get(this.url + "/PresentIllness1/" + id)
         .then(
           (response) => (
             (this.AllIllness1 = response.data), this.SearchIllness2(id)
@@ -595,12 +596,12 @@ export default {
     },
     SearchIllness2(id) {
       this.axios
-        .get("http://10.12.100.164:8001/api/PresentIllness2/" + id)
+        .get(this.url + "/PresentIllness2/" + id)
         .then((response) => (this.AllIllness2 = response.data));
     },
     ClickSymptom(id) {
       this.axios
-        .get("http://10.12.100.164:8001/api/PresentSymptom/" + id)
+        .get(this.url + "/PresentSymptom/" + id)
         .then(
           (response) => ((this.SymptomId = response.data), this.IllnessSearch())
         );
@@ -608,7 +609,7 @@ export default {
     },
     SymptomWithoutSelected() {
       this.axios
-        .get("http://10.12.100.164:8001/api/HintSymptom")
+        .get(this.url + "/HintSymptom")
         .then(
           (response) => (
             (this.AllSymptom = response.data), this.CheckTheSymptom()
@@ -618,7 +619,7 @@ export default {
     IllnessSearch() {
       this.AllIllness = null;
       this.axios
-        .get("http://10.12.100.164:8001/api/IllnessSearch")
+        .get(this.url + "/IllnessSearch")
         .then(
           (response) => (
             (this.AllIllness = response.data), this.SelectedSymptom()
@@ -627,7 +628,7 @@ export default {
     },
     SelectedSymptom() {
       this.axios
-        .get("http://10.12.100.164:8001/api/SelectedSymptom")
+        .get(this.url + "/SelectedSymptom")
         .then(
           (response) => (this.SymptomId = response.data),
           this.SymptomWithoutSelected()
@@ -635,7 +636,7 @@ export default {
     },
     DeleteSymptom(id) {
       this.axios
-        .get("http://10.12.100.164:8001/api/DeleteSymptom/" + id)
+        .get(this.url + "/DeleteSymptom/" + id)
         .then(
           (response) => (
             (this.SymptomId = response.data), this.SyptomAfterDelete()
@@ -646,11 +647,11 @@ export default {
       this.AllIllness = null;
       this.SymptomId = null;
       this.axios
-        .get("http://10.12.100.164:8001/api/SelectedSymptom")
+        .get(this.url + "/SelectedSymptom")
         .then((response) => (this.SymptomId = response.data));
 
       this.axios
-        .get("http://10.12.100.164:8001/api/IllnessSearch")
+        .get(this.url + "/IllnessSearch")
         .then(
           (response) => (this.AllIllness = response.data),
           this.SymptomWithoutSelected()
@@ -658,51 +659,51 @@ export default {
     },
     CheckCurrent() {
       this.axios
-        .get("http://10.12.100.164:8001/api/GetCurrentBD")
+        .get(this.url + "/GetCurrentBD")
         .then((response) => (this.CurrentBD = response.data));
       this.axios
-        .get("http://10.12.100.164:8001/api/GetCurrentBDForAdmin")
+        .get(this.url + "/GetCurrentBDForAdmin")
         .then((response) => (this.GetCurrentBDForAdmin = response.data, this.ReloadAll()));
     },
     ReloadAll() {
       this.axios
-        .get("http://10.12.100.164:8001/api/CountSymptomForAdmin")
+        .get(this.url + "/CountSymptomForAdmin")
         .then((response) => (this.CountSymptom = response.data));
       this.axios
-        .get("http://10.12.100.164:8001/api/CountIllnessForAdmin")
+        .get(this.url + "/CountIllnessForAdmin")
         .then((response) => (this.CountIllness = response.data));
       this.axios
-        .get("http://10.12.100.164:8001/api/AllSymptomForAdmin")
+        .get(this.url + "/AllSymptomForAdmin")
         .then((response) => (this.AllSymptom = response.data));
       this.axios
-        .get("http://10.12.100.164:8001/api/AdminAllIllness")
+        .get(this.url + "/AdminAllIllness")
         .then((response) => (this.AllIllness = response.data));
       this.axios
-        .get("http://10.12.100.164:8001/api/AllTableForAdmin")
+        .get(this.url + "/AllTableForAdmin")
         .then((response) => (this.AllTable = response.data));
       this.axios
-        .get("http://10.12.100.164:8001/api/ReturnAllTypeForAdmin")
+        .get(this.url + "/ReturnAllTypeForAdmin")
         .then((response) => (this.AllType = response.data));
       this.axios
-        .get("http://10.12.100.164:8001/api/ReturnAllTypeWithoutAll")
+        .get(this.url + "/ReturnAllTypeWithoutAll")
         .then((response) => (this.ReturnAllTypeWithoutAll = response.data));
       this.axios
         .get(
-          "http://10.12.100.164:8001/api/ReturnBdVersionForAdmin",
+          this.url + "/ReturnBdVersionForAdmin",
           this.headerForRequest
         )
         .then((response) => (this.BdVersion = response.data));
       this.axios
-        .get("http://10.12.100.164:8001/api/GetListOfDB", this.headerForRequest)
+        .get(this.url + "/GetListOfDB", this.headerForRequest)
         .then((response) => (this.ListDB = response.data));
       this.axios
-        .get("http://10.12.100.164:8001/api/ReturnSymptomAndTypeForAdmin")
+        .get(this.url + "/ReturnSymptomAndTypeForAdmin")
         .then((response) => (this.SymptomAndType = response.data));
       this.axios
-        .get("http://10.12.100.164:8001/api/GetCurrentBD")
+        .get(this.url + "/GetCurrentBD")
         .then((response) => (this.CurrentBD = response.data));
       this.axios
-        .get("http://10.12.100.164:8001/api/GetCurrentBDForAdmin")
+        .get(this.url + "/GetCurrentBDForAdmin")
         .then((response) => (this.GetCurrentBDForAdmin = response.data));
 
       this.ClickSymptomForTable(1, 0);
@@ -711,43 +712,43 @@ export default {
 
   mounted() {
     this.axios
-      .get("http://10.12.100.164:8001/api/CountSymptomForAdmin")
+      .get(this.url + "/CountSymptomForAdmin")
       .then((response) => (this.CountSymptom = response.data));
     this.axios
-      .get("http://10.12.100.164:8001/api/CountIllnessForAdmin")
+      .get(this.url + "/CountIllnessForAdmin")
       .then((response) => (this.CountIllness = response.data));
     this.axios
-      .get("http://10.12.100.164:8001/api/AllSymptomForAdmin")
+      .get(this.url + "/AllSymptomForAdmin")
       .then((response) => (this.AllSymptom = response.data));
     this.axios
-      .get("http://10.12.100.164:8001/api/AdminAllIllness")
+      .get(this.url + "/AdminAllIllness")
       .then((response) => (this.AllIllness = response.data));
     this.axios
-      .get("http://10.12.100.164:8001/api/AllTableForAdmin")
+      .get(this.url + "/AllTableForAdmin")
       .then((response) => (this.AllTable = response.data));
     this.axios
-      .get("http://10.12.100.164:8001/api/ReturnAllTypeForAdmin")
+      .get(this.url + "/ReturnAllTypeForAdmin")
       .then((response) => (this.AllType = response.data));
     this.axios
-      .get("http://10.12.100.164:8001/api/ReturnAllTypeWithoutAll")
+      .get(this.url + "/ReturnAllTypeWithoutAll")
       .then((response) => (this.ReturnAllTypeWithoutAll = response.data));
     this.axios
       .get(
-        "http://10.12.100.164:8001/api/ReturnBdVersionForAdmin",
+        this.url + "/ReturnBdVersionForAdmin",
         this.headerForRequest
       )
       .then((response) => (this.BdVersion = response.data));
     this.axios
-      .get("http://10.12.100.164:8001/api/GetListOfDB", this.headerForRequest)
+      .get(this.url + "/GetListOfDB", this.headerForRequest)
       .then((response) => (this.ListDB = response.data));
     this.axios
-      .get("http://10.12.100.164:8001/api/ReturnSymptomAndTypeForAdmin")
+      .get(this.url + "/ReturnSymptomAndTypeForAdmin")
       .then((response) => (this.SymptomAndType = response.data));
     this.axios
-      .get("http://10.12.100.164:8001/api/GetCurrentBD")
+      .get(this.url + "/GetCurrentBD")
       .then((response) => (this.CurrentBD = response.data));
     this.axios
-      .get("http://10.12.100.164:8001/api/GetCurrentBDForAdmin")
+      .get(this.url + "/GetCurrentBDForAdmin")
       .then((response) => (this.GetCurrentBDForAdmin = response.data));
 
     this.ClickSymptomForTable(1, 0);

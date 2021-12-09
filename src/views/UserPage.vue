@@ -33,7 +33,7 @@
                 item-text="name"
                 item-value="id"
               ></v-select>
-              <v-sheet elevation="4" class="overflow-y-auto" max-height="290">
+              <v-sheet class="overflow-y-auto" max-height="290">
                 <v-simple-table dense>
                   <tbody>
                     <tr
@@ -58,7 +58,7 @@
                 <th class="text-left text-uppercase font-weight-regular px-3">
                   Заболевания
                 </th>
-                <v-sheet elevation="4" class="overflow-y-auto" max-height="420">
+                <v-sheet class="overflow-y-auto" max-height="420">
                   <v-simple-table dense>
                     <tbody>
                       <tr v-for="item in AllIllness" :key="item.name">
@@ -75,7 +75,7 @@
               </div>
             </v-col>
           </v-row>
-          <v-row v-if="visibleSelectedSimptom">
+          <v-row>
             <v-col>
               <v-row class="pa-3" align="center">
                 <th class="text-left text-uppercase font-weight-regular px-3">
@@ -87,7 +87,7 @@
                 >
               </v-row>
 
-              <v-sheet elevation="4" class="overflow-y-auto" max-height="190">
+              <v-sheet class="overflow-y-auto" max-height="190">
                 <v-simple-table dense>
                   <tbody>
                     <tr
@@ -101,10 +101,10 @@
                 </v-simple-table>
               </v-sheet>
             </v-col>
-
+            
             <v-col>
-              <div v-if="CheckSymptom != 'not'">
-                <v-row class="pa-3" align="center">
+              <div v-if="CheckSymptom != null">
+                <v-row v-if="CheckSymptom != 'not'" class="pa-3" align="center">
                   <th class="text-left text-uppercase font-weight-regular px-3">
                     Следует проверить следующий симптом:
                   </th>
@@ -114,6 +114,12 @@
                     text
                     color="green"
                     >Добавить</v-btn
+                  >
+                  <v-btn
+                    @click="CheckTheSymptom()"
+                    text
+                    color="green"
+                    >Cледующий</v-btn
                   >
                 </v-row>
 
@@ -134,7 +140,7 @@
               <th class="text-left text-uppercase font-weight-regular px-3">
                 Заболевания
               </th>
-              <v-sheet elevation="4" class="overflow-y-auto" max-height="650">
+              <v-sheet class="overflow-y-auto" max-height="650">
                 <v-simple-table dense>
                   <tbody>
                     <tr
@@ -156,7 +162,7 @@
                   </th>
                 </v-row>
                 <v-row class="pt-3 mr-4">
-                  <v-card class="rounded-0 d-flex pa-2">
+                  <v-card elevation='0' class="rounded-0 d-flex pa-2">
                     <v-card-text class="black--text">
                       {{ illnessSelected }}
                     </v-card-text>
@@ -169,7 +175,6 @@
                 </v-row>
                 <v-row class="pt-3 mr-4">
                   <v-sheet
-                    elevation="4"
                     class="overflow-y-auto"
                     max-height="220"
                   >
@@ -191,7 +196,7 @@
                     Симптомы которые могут быть:
                   </th>
                   <v-sheet
-                    elevation="4"
+                  
                     class="overflow-y-auto"
                     max-height="220"
                   >
@@ -236,6 +241,7 @@ export default {
   name: "App",
   data() {
     return {
+      url: 'http://127.0.0.1:8000/api',
       search: "",
       headers: [
         {
@@ -294,7 +300,7 @@ export default {
     },
     ChangeToYes() {
       this.axios.get(
-        "http://10.12.100.164:8001/api/ChangeToYes/" +
+        this.url + "/ChangeToYes/" +
           this.IdIllnessToChange +
           "/" +
           this.IdSymptomToChange
@@ -303,7 +309,7 @@ export default {
     },
     ChangeToNo() {
       this.axios.get(
-        "http://10.12.100.164:8001/api/ChangeToNo/" +
+        this.url + "/ChangeToNo/" +
           this.IdIllnessToChange +
           "/" +
           this.IdSymptomToChange
@@ -312,7 +318,7 @@ export default {
     },
     ChangeToMaybe() {
       this.axios.get(
-        "http://10.12.100.164:8001/api/ChangeToMaybe/" +
+        this.url + "/ChangeToMaybe/" +
           this.IdIllnessToChange +
           "/" +
           this.IdSymptomToChange
@@ -324,7 +330,7 @@ export default {
     },
     SendNewSymptom() {
       this.axios.get(
-        "http://10.12.100.164:8001/api/AddSymptom/" +
+        this.url + "/AddSymptom/" +
           this.nameSymptom +
           "/" +
           this.nameEngSymptom +
@@ -336,7 +342,7 @@ export default {
     },
     SendNewIllness() {
       this.axios.get(
-        "http://10.12.100.164:8001/api/AddIllness/" +
+        this.url + "/AddIllness/" +
           this.NameIllness +
           "/" +
           this.NameEngIllness +
@@ -357,12 +363,12 @@ export default {
       this.Illness = name;
       this.IllnessStringTable = null;
       this.axios
-        .get("http://10.12.100.164:8001/api/TableString/" + id)
+        .get(this.url + "/TableString/" + id)
         .then((response) => (this.IllnessStringTable = response.data));
     },
     CheckTheSymptom() {
       this.axios
-        .get("http://10.12.100.164:8001/api/CheckSymptom/" + this.UserId)
+        .get(this.url + "/CheckSymptom/" + this.UserId)
         .then((response) => (this.CheckSymptom = response.data));
     },
     DeleteAllSelectedIllness() {
@@ -374,22 +380,23 @@ export default {
     },
     DeleteAllSelectedSymptom() {
       this.axios.get(
-        "http://10.12.100.164:8001/api/DeleteSelectedSymptom/" + this.UserId
+        this.url + "/DeleteSelectedSymptom/" + this.UserId
       );
       this.SymptomId = null;
       (this.visibleSelectedSimptom = false),
         this.axios
-          .get("http://10.12.100.164:8001/api/AllIllness/" + this.UserId)
+          .get(this.url + "/AllIllness/" + this.UserId)
           .then((response) => (this.AllIllness = response.data));
       this.axios
-        .get("http://10.12.100.164:8001/api/AllSymptom")
+        .get(this.url + "/AllSymptom")
         .then((response) => (this.AllSymptom = response.data));
+      this.CheckSymptom = null;
     },
     ClickIllness(id, name) {
       this.illnessSelected = name;
       this.flagSimptom = true;
       this.axios
-        .get("http://10.12.100.164:8001/api/PresentIllness1/" + id)
+        .get(this.url + "/PresentIllness1/" + id)
         .then(
           (response) => (
             (this.AllIllness1 = response.data), this.SearchIllness2(id)
@@ -398,13 +405,13 @@ export default {
     },
     SearchIllness2(id) {
       this.axios
-        .get("http://10.12.100.164:8001/api/PresentIllness2/" + id)
+        .get(this.url + "/PresentIllness2/" + id)
         .then((response) => (this.AllIllness2 = response.data));
     },
     ClickSymptom(id) {
       this.axios
         .get(
-          "http://10.12.100.164:8001/api/PresentSymptom/" +
+          this.url + "/PresentSymptom/" +
             this.UserId +
             "/" +
             id
@@ -416,7 +423,7 @@ export default {
     },
     SymptomWithoutSelected() {
       this.axios
-        .get("http://10.12.100.164:8001/api/HintSymptom/" + this.UserId)
+        .get(this.url + "/HintSymptom/" + this.UserId)
         .then(
           (response) => (
             (this.AllSymptom = response.data), this.CheckTheSymptom()
@@ -426,7 +433,7 @@ export default {
     IllnessSearch() {
       this.AllIllness = null;
       this.axios
-        .get("http://10.12.100.164:8001/api/IllnessSearch/" + this.UserId)
+        .get(this.url + "/IllnessSearch/" + this.UserId)
         .then(
           (response) => (
             (this.AllIllness = response.data), this.SelectedSymptom()
@@ -435,7 +442,7 @@ export default {
     },
     SelectedSymptom() {
       this.axios
-        .get("http://10.12.100.164:8001/api/SelectedSymptom/" + this.UserId)
+        .get(this.url + "/SelectedSymptom/" + this.UserId)
         .then(
           (response) => (this.SymptomId = response.data),
           this.SymptomWithoutSelected()
@@ -444,7 +451,7 @@ export default {
     DeleteSymptom(id) {
       this.axios
         .get(
-          "http://10.12.100.164:8001/api/DeleteSymptom/" +
+          this.url + "/DeleteSymptom/" +
             this.UserId +
             "/" +
             id
@@ -459,11 +466,11 @@ export default {
       this.AllIllness = null;
       this.SymptomId = null;
       this.axios
-        .get("http://10.12.100.164:8001/api/SelectedSymptom/" + this.UserId)
+        .get(this.url + "/SelectedSymptom/" + this.UserId)
         .then((response) => (this.SymptomId = response.data));
 
       this.axios
-        .get("http://10.12.100.164:8001/api/IllnessSearch/" + this.UserId)
+        .get(this.url + "/IllnessSearch/" + this.UserId)
         .then(
           (response) => (this.AllIllness = response.data),
           this.SymptomWithoutSelected()
@@ -473,30 +480,30 @@ export default {
   mounted() {
     if (localStorage.getItem("userId") == null) {
       this.axios
-        .get("http://10.12.100.164:8001/api/GetUserId")
+        .get(this.url + "/GetUserId")
         .then((response) => (localStorage.userId = response.data));
     }
     this.UserId = localStorage.userId;
     this.axios
-      .get("http://10.12.100.164:8001/api/CountSymptom")
+      .get(this.url + "/CountSymptom")
       .then((response) => (this.CountSymptom = response.data));
     this.axios
-      .get("http://10.12.100.164:8001/api/CountIllness")
+      .get(this.url + "/CountIllness")
       .then((response) => (this.CountIllness = response.data));
     this.axios
-      .get("http://10.12.100.164:8001/api/AllSymptom")
+      .get(this.url + "/AllSymptom")
       .then((response) => (this.AllSymptom = response.data));
     this.axios
-      .get("http://10.12.100.164:8001/api/AllIllness/" + this.UserId)
+      .get(this.url + "/AllIllness/" + this.UserId)
       .then((response) => (this.AllIllness = response.data));
     this.axios
-      .get("http://10.12.100.164:8001/api/SelectedSymptom/" + this.UserId)
+      .get(this.url + "/SelectedSymptom/" + this.UserId)
       .then((response) => (this.SymptomId = response.data));
     this.axios
-      .get("http://10.12.100.164:8001/api/AllTable")
+      .get(this.url + "/AllTable")
       .then((response) => (this.AllTable = response.data));
     this.axios
-      .get("http://10.12.100.164:8001/api/ReturnAllType")
+      .get(this.url + "/ReturnAllType")
       .then((response) => (this.AllType = response.data));
     if (this.SymptomId != null) {
       this.visibleSelectedSimptom = true
