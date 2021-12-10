@@ -366,7 +366,7 @@ export default {
   name: "App",
   data() {
     return {
-      url: "http://10.12.100.164:8000/api",
+      url: "http://10.12.100.164:8001/api",
       search: "",
       file: null,
       headers: [
