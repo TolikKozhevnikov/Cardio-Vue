@@ -247,7 +247,7 @@ export default {
   name: "App",
   data() {
     return {
-      url: "http://127.0.0.1:8000/api",
+      url: "http://10.12.100.164:8000/api",
       search: "",
       headers: [
         {
