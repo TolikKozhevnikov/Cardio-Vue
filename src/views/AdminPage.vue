@@ -8,12 +8,34 @@
           <span>диагноз</span>
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn text class="text-uppercase" @click="goToUserPage()">Вернуться в диагностику</v-btn>
+        <v-btn
+          color="black"
+          elevation="2"
+          outlined
+          class="text-uppercase"
+          @click="goToUserPage()"
+          >Вернуться в диагностику</v-btn
+        >
+        &nbsp;&nbsp;&nbsp;
         <div v-if="elIsVisible">
-          <v-btn text class="text-uppercase" @click="goToPage()">Войти</v-btn>
+          <v-btn
+            color="black"
+            elevation="2"
+            outlined
+            class="text-uppercase"
+            @click="goToPage()"
+            >Войти</v-btn
+          >
         </div>
         <div v-else>
-          <v-btn text class="text-uppercase" @click="goToPage()">Выйти</v-btn>
+          <v-btn
+            color="black"
+            elevation="2"
+            outlined
+            class="text-uppercase"
+            @click="goToPage()"
+            >Выйти</v-btn
+          >
         </div>
       </v-app-bar>
     </div>
@@ -83,7 +105,7 @@
             <v-card-actions>
               <v-btn
                 color="green darken-1"
-                text
+                outlined
                 @click="ChangeToYes(), (dialog = false)"
               >
                 Да
@@ -91,20 +113,20 @@
 
               <v-btn
                 color="green darken-1"
-                text
+                outlined
                 @click="ChangeToNo(), (dialog = false)"
               >
                 Нет
               </v-btn>
               <v-btn
                 color="green darken-1"
-                text
+                outlined
                 @click="ChangeToMaybe(), (dialog = false)"
               >
                 Может быть
               </v-btn>
               <v-spacer></v-spacer>
-              <v-btn color="red darken-1" text @click="dialog = false">
+              <v-btn color="red darken-1" outlined @click="dialog = false">
                 Закрыть
               </v-btn>
             </v-card-actions>
@@ -145,7 +167,7 @@
                 <v-btn
                   color="green darken-1"
                   block
-                  text
+                  outlined
                   @click="SendNewSymptom()"
                 >
                   Добавить новый симптом
@@ -197,7 +219,7 @@
                 <v-btn
                   color="green darken-1"
                   block
-                  text
+                  outlined
                   @click="SendNewIllness()"
                 >
                   Добавить новое заболевание
@@ -232,7 +254,7 @@
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn
                             color="green darken-3"
-                            text
+                            outlined
                             dark
                             v-bind="attrs"
                             v-on="on"
@@ -348,7 +370,7 @@
             </h5>
             <v-btn
               color="success"
-              text
+              outlined
               @click="dialog = false"
               v-on:click="submitFile()"
             >
@@ -366,7 +388,7 @@ export default {
   name: "App",
   data() {
     return {
-      url: "http://10.12.100.164:8001/api",
+      url: "http://10.12.100.164:8000/api",
       search: "",
       file: null,
       headers: [
@@ -732,7 +754,7 @@ export default {
         this.$router.push("/Auth");
       }
     },
-    goToUserPage(){
+    goToUserPage() {
       this.$router.push("/UserPage");
     },
   },

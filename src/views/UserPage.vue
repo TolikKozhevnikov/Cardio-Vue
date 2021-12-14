@@ -9,11 +9,34 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <div v-if="elIsVisible">
-          <v-btn text class="text-uppercase" @click="goToPage()">Войти</v-btn>
+          <v-btn
+            color="black"
+            elevation="2"
+            outlined
+            class="text-uppercase"
+            @click="goToPage()"
+            >Войти</v-btn
+          >
         </div>
         <div v-else>
-          <v-btn text class="text-uppercase" @click="goToAdminPage()">Вернуться в администрирование</v-btn>
-          <v-btn text class="text-uppercase" @click="goToPage()">Выйти</v-btn>
+
+          <v-btn
+            color="black"
+            elevation="2"
+            outlined
+            class="text-uppercase"
+            @click="goToAdminPage()"
+            >Вернуться в администрирование</v-btn
+          >
+          &nbsp;
+          <v-btn
+            color="black"
+            elevation="2"
+            outlined
+            class="text-uppercase"
+            @click="goToPage()"
+            >Выйти</v-btn
+          >
         </div>
       </v-app-bar>
     </div>
@@ -98,7 +121,7 @@
                   Выбранные симптомы:
                 </th>
                 <v-spacer></v-spacer>
-                <v-btn text color="success" @click="DeleteAllSelectedSymptom()"
+                <v-btn outlined color="success" @click="DeleteAllSelectedSymptom()"
                   >Удалить выбранные симптомы</v-btn
                 >
               </v-row>
@@ -127,11 +150,12 @@
                   <v-spacer></v-spacer>
                   <v-btn
                     @click="ClickSymptom(CheckSymptom.id)"
-                    text
+                    outlined
                     color="green"
                     >Добавить</v-btn
                   >
-                  <v-btn @click="CheckTheSymptom()" text color="green"
+                  &nbsp;
+                  <v-btn @click="CheckTheSymptom()" outlined color="green"
                     >Cледующий</v-btn
                   >
                 </v-row>
@@ -222,7 +246,7 @@
                 <v-row class="py-3 mr-4">
                   <v-btn
                     block
-                    text
+                    outlined
                     color="success"
                     @click="DeleteAllSelectedIllness()"
                     >Начать заново</v-btn
@@ -247,7 +271,7 @@ export default {
   name: "App",
   data() {
     return {
-      url: "http://10.12.100.164:8001/api",
+      url: "http://10.12.100.164:8000/api",
       search: "",
       headers: [
         {
@@ -478,18 +502,42 @@ export default {
     },
     goToPage() {
       if (localStorage.getItem("token") != null) {
-        localStorage.removeItem("token")
+        localStorage.removeItem("token");
         this.elIsVisible = false;
         this.$router.push("/Auth");
       } else {
         this.elIsVisible = true;
         this.$router.push("/Auth");
-        
       }
-    
     },
-    goToAdminPage(){
+    goToAdminPage() {
       this.$router.push("/AdminPage");
+    },
+    StarData() {
+      this.axios
+        .get(this.url + "/CountSymptom")
+        .then((response) => (this.CountSymptom = response.data));
+      this.axios
+        .get(this.url + "/CountIllness")
+        .then((response) => (this.CountIllness = response.data));
+      this.axios
+        .get(this.url + "/AllSymptom")
+        .then((response) => (this.AllSymptom = response.data));
+      this.axios
+        .get(this.url + "/AllIllness/" + this.UserId)
+        .then((response) => (this.AllIllness = response.data));
+      this.axios
+        .get(this.url + "/SelectedSymptom/" + this.UserId)
+        .then((response) => (this.SymptomId = response.data));
+      this.axios
+        .get(this.url + "/AllTable")
+        .then((response) => (this.AllTable = response.data));
+      this.axios
+        .get(this.url + "/ReturnAllType")
+        .then((response) => (this.AllType = response.data));
+      if (this.SymptomId != null) {
+        this.visibleSelectedSimptom = true;
+      }
     },
   },
   updated() {
@@ -508,32 +556,16 @@ export default {
     if (localStorage.getItem("userId") == null) {
       this.axios
         .get(this.url + "/GetUserId")
-        .then((response) => (localStorage.userId = response.data));
-    }
-    this.UserId = localStorage.userId;
-    this.axios
-      .get(this.url + "/CountSymptom")
-      .then((response) => (this.CountSymptom = response.data));
-    this.axios
-      .get(this.url + "/CountIllness")
-      .then((response) => (this.CountIllness = response.data));
-    this.axios
-      .get(this.url + "/AllSymptom")
-      .then((response) => (this.AllSymptom = response.data));
-    this.axios
-      .get(this.url + "/AllIllness/" + this.UserId)
-      .then((response) => (this.AllIllness = response.data));
-    this.axios
-      .get(this.url + "/SelectedSymptom/" + this.UserId)
-      .then((response) => (this.SymptomId = response.data));
-    this.axios
-      .get(this.url + "/AllTable")
-      .then((response) => (this.AllTable = response.data));
-    this.axios
-      .get(this.url + "/ReturnAllType")
-      .then((response) => (this.AllType = response.data));
-    if (this.SymptomId != null) {
-      this.visibleSelectedSimptom = true;
+        .then(
+          (response) => (
+            (localStorage.userId = response.data),
+            (this.UserId = localStorage.userId),
+            this.StarData()
+          )
+        );
+    } else {
+      this.UserId = localStorage.userId;
+      this.StarData();
     }
   },
   computed: {

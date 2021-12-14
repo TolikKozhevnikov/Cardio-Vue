@@ -7,14 +7,35 @@
           <span>диагноз</span>
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn text class="text-uppercase" @click="goToUserPage()">Вернуться в диагностику</v-btn>
+        <v-btn
+          color="black"
+          elevation="2"
+          outlined
+          class="text-uppercase"
+          @click="goToUserPage()"
+          >Вернуться в диагностику</v-btn
+        >
+        &nbsp;&nbsp;&nbsp;
         <div v-if="elIsVisible">
-          <v-btn text class="text-uppercase" @click="goToPage()">Войти</v-btn>
+          <v-btn
+            color="black"
+            elevation="2"
+            outlined
+            class="text-uppercase"
+            @click="goToPage()"
+            >Войти</v-btn
+          >
         </div>
         <div v-else>
-          <v-btn text class="text-uppercase" @click="goToPage()">Выйти</v-btn>
+          <v-btn
+            color="black"
+            elevation="2"
+            outlined
+            class="text-uppercase"
+            @click="goToPage()"
+            >Выйти</v-btn
+          >
         </div>
-        
       </v-app-bar>
     </div>
     <v-container>
@@ -87,7 +108,7 @@ export default {
     login(event) {
       event.preventDefault();
       this.axios
-        .post(`http://10.12.100.164:8001/auth/token`, {
+        .post(`http://10.12.100.164:8000/auth/token`, {
           username: this.username,
           password: this.password,
         })
@@ -111,7 +132,7 @@ export default {
         this.$router.push("/Auth");
       }
     },
-    goToUserPage(){
+    goToUserPage() {
       this.$router.push("/UserPage");
     },
   },
