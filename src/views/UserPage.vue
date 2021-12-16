@@ -2,8 +2,8 @@
 <template>
   <v-app>
     <div>
-      <v-app-bar elevation="4" color="green lighten-4" dense>
-        <v-toolbar-title class="text-left text-uppercase font-weight-regular">
+      <v-app-bar absolute color="green lighten-4" dense>
+        <v-toolbar-title @click="goToHomePage()" class="text-left text-uppercase font-weight-regular">
           <span class="font-weight-light">Кардио</span>
           <span>диагноз</span>
         </v-toolbar-title>
@@ -512,6 +512,9 @@ export default {
     },
     goToAdminPage() {
       this.$router.push("/AdminPage");
+    },
+    goToHomePage(){
+      this.$router.push("/");
     },
     StarData() {
       this.axios
