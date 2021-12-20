@@ -40,7 +40,7 @@
         </div>
       </v-app-bar>
     </div>
-    <v-tabs color="green darken-1">
+    <v-tabs class="mt-14" color="green darken-1">
       <v-tab :key="1">Диагностика по симптомам</v-tab>
       <v-tab :key="2">Диагностика по заболеваниям</v-tab>
       <v-tab-item :key="1">

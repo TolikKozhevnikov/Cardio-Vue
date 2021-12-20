@@ -39,7 +39,7 @@
         </div>
       </v-app-bar>
     </div>
-    <v-tabs color="green darken-1">
+    <v-tabs class="mt-14" color="green darken-1">
       <v-tab :key="1">Заболевания / Все симптомы</v-tab>
       <v-tab :key="2">Добавить симптом / заболевание</v-tab>
       <v-tab :key="3">Изменение типа обследования </v-tab>
