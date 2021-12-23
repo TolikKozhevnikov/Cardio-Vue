@@ -38,17 +38,17 @@
         </div>
       </v-app-bar>
     </div>
-    <v-container>
-      <v-parallax dark height="200" src="../img/2.png">
+    <v-container class="mt-14">
+      <v-parallax dark height="200" src="../img/13.png">
         <v-row align="center" justify="center">
           <v-col class="text-center" cols="12">
-            <h1 class="font-weight-thin text-sm-h2 text-lg-h1">Авторизация</h1>
+            <h1 class="font-weight-thin black--text text-sm-h2 text-lg-h1">Авторизация</h1>
           </v-col>
         </v-row>
       </v-parallax>
       <v-row>
         <v-col cols="12" md="12">
-          <v-card class="pa-4">
+          <v-card class="pa-4 rounded-0">
             <b-form @submit="login">
               <div class="form-group">
                 <label for="username">Логин:</label>
@@ -77,9 +77,9 @@
                 color="success"
                 @click="dialog = false"
                 v-on:click="login"
-                type="submit"
+                outlined
               >
-                Войти
+                Войти в администрирование
               </v-btn>
 
               <v-row align="center" justify="center">

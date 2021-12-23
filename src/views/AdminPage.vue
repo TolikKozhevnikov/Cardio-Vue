@@ -3,7 +3,10 @@
   <v-app>
     <div>
       <v-app-bar absolute color="green lighten-4" dense>
-        <v-toolbar-title @click="goToHomePage()" class="text-left text-uppercase font-weight-regular">
+        <v-toolbar-title
+          @click="goToHomePage()"
+          class="text-left text-uppercase font-weight-regular"
+        >
           <span class="font-weight-light">Кардио</span>
           <span>диагноз</span>
         </v-toolbar-title>
@@ -50,7 +53,7 @@
             <th class="text-left text-uppercase font-weight-regular px-3">
               Заболевания
             </th>
-            <v-sheet elevation="4" class="overflow-y-auto" max-height="650">
+            <v-sheet elevation="4" class="overflow-y-auto" max-height="780">
               <v-simple-table dense>
                 <tbody>
                   <tr
@@ -69,7 +72,7 @@
             <th class="text-left text-uppercase font-weight-regular px-3">
               Все симптомы
             </th>
-            <v-sheet elevation="4" class="overflow-y-auto" max-height="650">
+            <v-sheet elevation="4" class="overflow-y-auto" max-height="780">
               <v-simple-table dense>
                 <tbody>
                   <tr
@@ -236,7 +239,7 @@
               Все симптомы
             </th>
 
-            <v-sheet elevation="4" class="overflow-y-auto" max-height="650">
+            <v-sheet elevation="4" class="overflow-y-auto" max-height="780">
               <v-simple-table dense>
                 <tbody>
                   <tr
@@ -288,7 +291,7 @@
         <v-conteiner>
           <v-row class="pa-4">
             <v-col>
-              <v-card>
+              <v-card class="rounded-0">
                 <v-container>
                   <v-row class="px-4 mt-4">
                     <p class="text-left font-weight-regular">
@@ -323,7 +326,7 @@
               </v-card>
             </v-col>
             <v-col>
-              <v-card>
+              <v-card class="rounded-0">
                 <v-container>
                   <v-row class="px-4 mt-4">
                     <p class="text-left font-weight-regular">
@@ -359,23 +362,56 @@
             </v-col>
           </v-row>
           <v-row class="pa-4">
-            <h5 class="font-weight-thin">
-              <input
-                class="pa-4"
-                type="file"
-                id="file"
-                ref="file"
-                v-on:change="handleFileUpload()"
-              />
-            </h5>
-            <v-btn
-              color="success"
-              outlined
-              @click="dialog = false"
-              v-on:click="submitFile()"
-            >
-              Загрузить базу данных
-            </v-btn>
+            <v-col>
+              <v-card class="rounded-0">
+                <v-conteiner>
+                  <v-row class="pt-4 mx-4">
+                    <p>
+                      Загрузить базу данных для редактирования или отображения
+                      пользователям:
+                    </p>
+                  </v-row>
+                  <div v-if="UploadIsComplite">
+                    <v-row class="px-4 mt-4">
+                      <p class="font-weight-regular">
+                        <input
+                          class="pa-4"
+                          type="file"
+                          id="file"
+                          ref="file"
+                          v-on:change="handleFileUpload()"
+                        />
+                      </p>
+
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        class="px-4 ma-4"
+                        color="success"
+                        outlined
+                        @click="dialog = false"
+                        v-on:click="submitFile()"
+                      >
+                        Загрузить базу данных
+                      </v-btn>
+                    </v-row>
+                  </div>
+                  <div v-else>
+                    <v-row class="px-4 mt-4">
+                      <v-btn
+                        color="success"
+                        class="px-4 ma-4"
+                        outlined
+                        @click="dialog = false"
+                        v-on:click="uploadMore()"
+                      >
+                        Загрузить еще?
+                      </v-btn>
+                    </v-row>
+                  </div>
+                </v-conteiner>
+              </v-card>
+            </v-col>
+            <v-col></v-col>
           </v-row>
         </v-conteiner>
       </v-tab-item>
@@ -445,6 +481,7 @@ export default {
       name: "",
       elIsVisible: null,
       info: "",
+      UploadIsComplite: true,
       headerForRequest: {
         headers: {
           Authorization: "Token " + localStorage.token,
@@ -453,6 +490,9 @@ export default {
     };
   },
   methods: {
+    uploadMore() {
+      this.UploadIsComplite = true;
+    },
     submitFile() {
       let formData = new FormData();
       if (localStorage.getItem("username") == null) {
@@ -469,7 +509,7 @@ export default {
         .catch(function () {
           console.log("FAILURE!!");
         });
-      this.XnetIsComplite = false;
+      this.UploadIsComplite = false;
     },
     handleFileUpload() {
       this.file = this.$refs.file.files[0];
@@ -704,7 +744,7 @@ export default {
           )
         );
     },
-    goToHomePage(){
+    goToHomePage() {
       this.$router.push("/");
     },
     ReloadAll() {

@@ -3,7 +3,10 @@
   <v-app>
     <div>
       <v-app-bar absolute color="green lighten-4" dense>
-        <v-toolbar-title @click="goToHomePage()" class="text-left text-uppercase font-weight-regular">
+        <v-toolbar-title
+          @click="goToHomePage()"
+          class="text-left text-uppercase font-weight-regular"
+        >
           <span class="font-weight-light">Кардио</span>
           <span>диагноз</span>
         </v-toolbar-title>
@@ -19,7 +22,6 @@
           >
         </div>
         <div v-else>
-
           <v-btn
             color="black"
             elevation="2"
@@ -72,7 +74,7 @@
                 item-text="name"
                 item-value="id"
               ></v-select>
-              <v-sheet class="overflow-y-auto" max-height="290">
+              <v-sheet class="overflow-y-auto" max-height="390">
                 <v-simple-table dense>
                   <tbody>
                     <tr
@@ -97,7 +99,7 @@
                 <th class="text-left text-uppercase font-weight-regular px-3">
                   Заболевания
                 </th>
-                <v-sheet class="overflow-y-auto" max-height="420">
+                <v-sheet class="overflow-y-auto" max-height="520">
                   <v-simple-table dense>
                     <tbody>
                       <tr v-for="item in AllIllness" :key="item.name">
@@ -116,12 +118,15 @@
           </v-row>
           <v-row>
             <v-col>
-              <v-row class="pa-3" align="center">
+              <v-row class="pa-3 mb-2" align="center">
                 <th class="text-left text-uppercase font-weight-regular px-3">
                   Выбранные симптомы:
                 </th>
                 <v-spacer></v-spacer>
-                <v-btn outlined color="success" @click="DeleteAllSelectedSymptom()"
+                <v-btn
+                  outlined
+                  color="success"
+                  @click="DeleteAllSelectedSymptom()"
                   >Удалить выбранные симптомы</v-btn
                 >
               </v-row>
@@ -177,7 +182,7 @@
               <th class="text-left text-uppercase font-weight-regular px-3">
                 Заболевания
               </th>
-              <v-sheet class="overflow-y-auto" max-height="650">
+              <v-sheet class="overflow-y-auto" max-height="780">
                 <v-simple-table dense>
                   <tbody>
                     <tr
@@ -192,26 +197,29 @@
               </v-sheet>
             </v-col>
             <v-col>
+              
               <div v-if="flagSimptom">
-                <v-row class="pt-3 mr-4">
+                
+                <v-row  class="pt-3 mr-4">
                   <th class="text-left text-uppercase font-weight-regular px-3">
                     Выбранное заболевание:
                   </th>
                 </v-row>
                 <v-row class="pt-3 mr-4">
-                  <v-card elevation="0" class="rounded-0 d-flex pa-2">
+                  <v-card elevation="0" height=130px class="rounded-0 d-flex">
                     <v-card-text class="black--text">
                       {{ illnessSelected }}
                     </v-card-text>
                   </v-card>
                 </v-row>
+                
                 <v-row class="pt-3 mr-4">
                   <th class="text-left text-uppercase font-weight-regular px-3">
                     Симптомы которые должны быть:
                   </th>
                 </v-row>
                 <v-row class="pt-3 mr-4">
-                  <v-sheet class="overflow-y-auto" max-height="220">
+                  <v-sheet class="overflow-y-auto" height="200">
                     <v-simple-table dense>
                       <tbody>
                         <tr
@@ -229,7 +237,7 @@
                   <th class="text-left text-uppercase font-weight-regular px-3">
                     Симптомы которые могут быть:
                   </th>
-                  <v-sheet class="overflow-y-auto" max-height="220">
+                  <v-sheet class="overflow-y-auto" height="300">
                     <v-simple-table dense>
                       <tbody>
                         <tr
@@ -513,7 +521,7 @@ export default {
     goToAdminPage() {
       this.$router.push("/AdminPage");
     },
-    goToHomePage(){
+    goToHomePage() {
       this.$router.push("/");
     },
     StarData() {
